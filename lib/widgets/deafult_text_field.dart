@@ -2,7 +2,6 @@ import 'package:evently/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class DeafultTextFormField extends StatefulWidget {
   const DeafultTextFormField({
@@ -15,6 +14,7 @@ class DeafultTextFormField extends StatefulWidget {
     this.onChanged,
     this.textStyle,
     required this.borderColor,
+    this.maxLines,
     super.key,
   });
   final TextEditingController? textEditingController;
@@ -26,6 +26,7 @@ class DeafultTextFormField extends StatefulWidget {
   final void Function(String)? onChanged;
   final TextStyle? textStyle;
   final Color borderColor;
+  final int? maxLines;
 
   @override
   State<DeafultTextFormField> createState() => _DeafultTextFormFieldState();
@@ -41,11 +42,14 @@ class _DeafultTextFormFieldState extends State<DeafultTextFormField> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: widget.textInputType,
       style: widget.textStyle,
+      maxLines: widget.maxLines,
       decoration: InputDecoration(
-        prefixIcon: SvgPicture.asset(
-          'assets/icons/${widget.prefixImageName}.svg',
-          fit: BoxFit.scaleDown,
-        ),
+        prefixIcon: widget.prefixImageName != null
+            ? SvgPicture.asset(
+                'assets/icons/${widget.prefixImageName}.svg',
+                fit: BoxFit.scaleDown,
+              )
+            : null,
         suffixIcon: widget.isPassword
             ? IconButton(
                 onPressed: () {

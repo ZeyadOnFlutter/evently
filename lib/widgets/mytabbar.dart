@@ -4,25 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Mytabbar extends StatelessWidget {
-  Mytabbar(
-      {required this.isCreateEvent,
-      required this.currentIndex,
-      required this.onTap,
-      super.key});
+  Mytabbar({
+    required this.isCreateEvent,
+    required this.currentIndex,
+    required this.onTap,
+    required this.tabBarLength,
+    super.key,
+  });
   void Function(int)? onTap;
+  int tabBarLength;
   int currentIndex;
   bool isCreateEvent;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: MyCategory.myCategory.length,
+      length: tabBarLength,
       child: TabBar(
         dividerColor: Colors.transparent,
         indicatorColor: Colors.transparent,
         isScrollable: true,
         padding: EdgeInsets.only(
           left: 16.w,
-          bottom: 22.h,
+          bottom: isCreateEvent ? 0 : 22.h,
         ),
         labelPadding: EdgeInsets.zero,
         tabAlignment: TabAlignment.start,

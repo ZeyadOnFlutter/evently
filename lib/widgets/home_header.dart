@@ -2,7 +2,6 @@ import 'package:evently/models/category.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/icon_item.dart';
 import 'package:evently/widgets/mytabbar.dart';
-import 'package:evently/widgets/tab_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -24,6 +23,7 @@ class HomeHeader extends StatelessWidget {
         ),
       ),
       child: SafeArea(
+        bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -107,6 +107,7 @@ class HomeHeader extends StatelessWidget {
               currentIndex: currentIndex,
               onTap: onTap,
               isCreateEvent: false,
+              tabBarLength: MyCategory.myCategory.length,
             ),
           ],
         ),

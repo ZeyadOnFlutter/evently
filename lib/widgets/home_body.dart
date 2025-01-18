@@ -22,8 +22,15 @@ class HomeBody extends StatelessWidget {
                 vertical: 16.h,
               ),
               itemBuilder: (context, index) {
-                return CategoryItem(
-                  index: index,
+                return Padding(
+                  padding: index == MyCategory.myCategory.length - 1
+                      ? EdgeInsets.only(
+                          bottom: 75.h,
+                        )
+                      : EdgeInsets.zero,
+                  child: CategoryItem(
+                    index: index,
+                  ),
                 );
               },
             ),

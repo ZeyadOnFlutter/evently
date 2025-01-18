@@ -1,7 +1,6 @@
 import 'package:evently/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({required this.onPressed, required this.label, super.key});
