@@ -1,12 +1,12 @@
 flutter_native_splash:
   color: "#F2FEFF"
-  image: assets/logo.png
-  branding: assets/branding_photo.png
+  image: assets/images/logo.png
+  branding: assets/images/branding_photo.png
   branding_bottom_padding: 24
   android_12:
-    image: assets/android12splash.png
+    image: assets/images/android12splash.png
     color: "#F2FEFF"    
-    branding: assets/branding_photo.png
+    branding: assets/images/branding_photo.png
     branding_bottom_padding: 24
 
 
