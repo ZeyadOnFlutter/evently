@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class HomeBody extends StatelessWidget {
   HomeBody({required this.currentIndex, super.key});
   int currentIndex;
+
   @override
   Widget build(BuildContext context) {
     return currentIndex == 0

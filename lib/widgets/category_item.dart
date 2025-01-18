@@ -13,14 +13,15 @@ class CategoryItem extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             children: [
               ClipRRect(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(
-                      16.r,
-                    ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    16.r,
                   ),
-                  child: Image.asset(
-                    'assets/images/${MyCategory.myCategory[index].imageName}.png',
-                  )),
+                ),
+                child: Image.asset(
+                  'assets/images/${MyCategory.myCategory[index].imageName}.png',
+                ),
+              ),
               Positioned(
                 top: 8.h,
                 left: 8.w,
