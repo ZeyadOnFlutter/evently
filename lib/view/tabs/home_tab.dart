@@ -13,22 +13,20 @@ class _HomeTabState extends State<HomeTab> {
   int currentindex = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          HomeHeader(
-            onTap: (index) {
-              setState(() {
-                currentindex = index;
-              });
-            },
-            currentIndex: currentindex,
-          ),
-          HomeBody(
-            currentIndex: currentindex,
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        HomeHeader(
+          onTap: (index) {
+            setState(() {
+              currentindex = index;
+            });
+          },
+          currentIndex: currentindex,
+        ),
+        HomeBody(
+          currentIndex: currentindex,
+        ),
+      ],
     );
   }
 }

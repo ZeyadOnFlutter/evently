@@ -18,7 +18,8 @@ class HomeBody extends StatelessWidget {
             future: _loadImage(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
+                return Padding(
+                  padding: EdgeInsets.only(top: 20.h),
                   child: CircularProgressIndicator(
                     color: Apptheme.primary,
                   ),
