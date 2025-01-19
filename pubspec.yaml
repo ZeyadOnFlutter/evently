@@ -36,6 +36,8 @@ dependencies:
   flutter_svg: ^2.0.17
   google_fonts: ^6.2.1
   intl: ^0.20.1
+  shared_preferences: ^2.3.5
+  smooth_page_indicator: ^1.2.0+3
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -56,6 +58,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/icons/
+    - assets/onboard/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -14,7 +14,7 @@ class DeafultTextFormField extends StatefulWidget {
     this.onChanged,
     this.textStyle,
     required this.borderColor,
-    this.maxLines,
+    this.maxLines = 1,
     super.key,
   });
   final TextEditingController? textEditingController;
