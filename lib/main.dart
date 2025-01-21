@@ -4,12 +4,14 @@ import 'package:evently/view/auth/register.dart';
 import 'package:evently/view/event/create_event.dart';
 import 'package:evently/view/home/home_screen.dart';
 import 'package:evently/view/onboard/slider_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool hasSeenSlider = prefs.getBool('endSlider') ?? false;
   String seenSlider =
