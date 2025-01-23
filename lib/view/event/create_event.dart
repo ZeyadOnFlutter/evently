@@ -1,7 +1,11 @@
 import 'package:evently/models/category.dart';
+import 'package:evently/models/event.dart';
+import 'package:evently/models/firebase_service.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
+import 'package:evently/widgets/login_button.dart';
 import 'package:evently/widgets/mytabbar.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,6 +13,7 @@ import 'package:intl/intl.dart';
 
 class CreateEvent extends StatefulWidget {
   const CreateEvent({super.key});
+
   static const String routeName = '/create-event';
 
   @override
@@ -20,6 +25,11 @@ class _CreateEventState extends State<CreateEvent> {
   DateTime? selectedDateTime;
   DateFormat dateFormat = DateFormat('dd/MM/yyyy');
   TimeOfDay? timeOfDay;
+  MyCategory selectedCategory = MyCategory.myCategory.first;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
   String format(BuildContext context, TimeOfDay timeOfDay) {
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);
@@ -31,18 +41,23 @@ class _CreateEventState extends State<CreateEvent> {
 
   @override
   Widget build(BuildContext context) {
+    selectedCategory = MyCategory.myCategory[currentIndex + 1];
     TextStyle? myblackTextTheme = Theme.of(context).textTheme.bodyLarge;
     TextStyle? myblueTextTheme = Theme.of(context)
         .textTheme
         .bodyLarge!
         .copyWith(color: Apptheme.primary);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Event'),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          title: const Text('Create Event'),
+        ),
+        body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16.h,
@@ -52,7 +67,7 @@ class _CreateEventState extends State<CreateEvent> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16.r),
                   child: Image.asset(
-                    'assets/images/${MyCategory.myCategory[currentIndex + 1].imageName}.png',
+                    'assets/images/${selectedCategory.imageName}.png',
                     height: 203.h,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -69,108 +84,136 @@ class _CreateEventState extends State<CreateEvent> {
                 isCreateEvent: true,
                 tabBarLength: MyCategory.myCategory.length - 1,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.w,
-                ),
-                child: Column(
-                  spacing: 16.h,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Title',
-                      style: myblackTextTheme,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
                     ),
-                    const DeafultTextFormField(
-                      hintText: 'Event Title',
-                      borderColor: Apptheme.grey,
-                      prefixImageName: 'note',
-                    ),
-                    Text(
-                      'Description',
-                      style: myblackTextTheme,
-                    ),
-                    const DeafultTextFormField(
-                      hintText: 'Event Descriprion',
-                      borderColor: Apptheme.grey,
-                      maxLines: 4,
-                    ),
-                    Row(
-                      spacing: 10.w,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/calendar.svg',
-                        ),
-                        Text(
-                          'Event Date',
-                          style: myblackTextTheme,
-                        ),
-                        const Spacer(),
-                        InkWell(
-                          onTap: () async {
-                            var date = await showDatePicker(
-                              context: context,
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.now().add(
-                                const Duration(days: 365),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        spacing: 16.h,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Title',
+                            style: myblackTextTheme,
+                          ),
+                          DeafultTextFormField(
+                            textEditingController: titleController,
+                            hintText: 'Event Title',
+                            borderColor: Apptheme.grey,
+                            prefixImageName: 'note',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please Enter Event Title';
+                              }
+                              return null;
+                            },
+                          ),
+                          Text(
+                            'Description',
+                            style: myblackTextTheme,
+                          ),
+                          DeafultTextFormField(
+                            textEditingController: descriptionController,
+                            hintText: 'Event Descriprion',
+                            borderColor: Apptheme.grey,
+                            maxLines: 4,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please Enter Event Descriprion';
+                              }
+                              return null;
+                            },
+                          ),
+                          Row(
+                            spacing: 10.w,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/calendar.svg',
                               ),
-                              initialEntryMode:
-                                  DatePickerEntryMode.calendarOnly,
-                            );
-                            if (date != null) {
-                              selectedDateTime = date;
-                              setState(() {});
-                            }
-                          },
-                          child: Text(
-                            selectedDateTime != null
-                                ? dateFormat.format(selectedDateTime!)
-                                : 'Choose Date',
-                            style: myblueTextTheme,
+                              Text(
+                                'Event Date',
+                                style: myblackTextTheme,
+                              ),
+                              const Spacer(),
+                              InkWell(
+                                onTap: () async {
+                                  var date = await showDatePicker(
+                                    context: context,
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime.now().add(
+                                      const Duration(days: 365),
+                                    ),
+                                    initialEntryMode:
+                                        DatePickerEntryMode.calendarOnly,
+                                  );
+                                  if (date != null) {
+                                    selectedDateTime = date;
+                                    setState(() {});
+                                  }
+                                },
+                                child: Text(
+                                  selectedDateTime != null
+                                      ? dateFormat.format(selectedDateTime!)
+                                      : 'Choose Date',
+                                  style: myblueTextTheme,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 10.w,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/clock.svg',
-                        ),
-                        Text(
-                          'Event Time',
-                          style: myblackTextTheme,
-                        ),
-                        const Spacer(),
-                        InkWell(
-                          onTap: () async {
-                            TimeOfDay? nowTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                              builder: (BuildContext context, Widget? child) {
-                                return MediaQuery(
-                                  data: MediaQuery.of(context).copyWith(
-                                    alwaysUse24HourFormat: false,
-                                  ),
-                                  child: child!,
-                                );
-                              },
-                            );
-                            if (nowTime != null) {
-                              timeOfDay = nowTime;
-                              setState(() {});
-                            }
-                          },
-                          child: Text(
-                            timeOfDay != null
-                                ? format(context, timeOfDay!)
-                                : 'Choose Time',
-                            style: myblueTextTheme,
+                          Row(
+                            spacing: 10.w,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/clock.svg',
+                              ),
+                              Text(
+                                'Event Time',
+                                style: myblackTextTheme,
+                              ),
+                              const Spacer(),
+                              InkWell(
+                                onTap: () async {
+                                  TimeOfDay? nowTime = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                      return MediaQuery(
+                                        data: MediaQuery.of(context).copyWith(
+                                          alwaysUse24HourFormat: false,
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
+                                  );
+                                  if (nowTime != null) {
+                                    timeOfDay = nowTime;
+                                    setState(() {});
+                                  }
+                                },
+                                child: Text(
+                                  timeOfDay != null
+                                      ? format(context, timeOfDay!)
+                                      : 'Choose Time',
+                                  style: myblueTextTheme,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                          DefaultButton(
+                            onPressed: () {
+                              createEvent(context);
+                            },
+                            label: 'Add',
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ],
@@ -178,5 +221,81 @@ class _CreateEventState extends State<CreateEvent> {
         ),
       ),
     );
+  }
+
+  void createEvent(BuildContext context) async {
+    if (formKey.currentState!.validate() &&
+        selectedDateTime != null &&
+        timeOfDay != null) {
+      DateTime dateTime = DateTime(
+        selectedDateTime!.year,
+        selectedDateTime!.month,
+        selectedDateTime!.day,
+        timeOfDay!.hour,
+        timeOfDay!.minute,
+      );
+      Event event = Event(
+        category: selectedCategory,
+        title: titleController.text,
+        description: descriptionController.text,
+        dateTime: dateTime,
+      );
+      await FirebaseService.addEventToFireStore(event)
+          .then(
+            (value) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Event Added Successfully',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  backgroundColor: Apptheme.primary,
+                ),
+              );
+              Navigator.of(context).pop();
+            },
+          )
+          .catchError((error) {
+            print(error.toString());
+      });
+
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Apptheme.primary,
+            title: Text(
+              'Incomplete Fields',
+              style: Theme.of(context)
+                  .textTheme
+                  .displayMedium!
+                  .copyWith(color: Apptheme.backgroundLight),
+            ),
+            content: Text(
+              'Please fill out all required fields.',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Apptheme.backgroundLight),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'OK',
+                  style: Theme.of(context)
+                      .textTheme
+                      .displayMedium!
+                      .copyWith(color: Apptheme.backgroundLight),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

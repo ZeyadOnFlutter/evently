@@ -2,8 +2,9 @@ import 'package:evently/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LoginButton extends StatelessWidget {
-  const LoginButton({required this.onPressed, required this.label, super.key});
+class DefaultButton extends StatelessWidget {
+  const DefaultButton(
+      {required this.onPressed, required this.label, super.key});
   final VoidCallback onPressed;
   final String label;
   @override

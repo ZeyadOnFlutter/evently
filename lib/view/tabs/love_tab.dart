@@ -59,9 +59,7 @@ class _LoveTabState extends State<LoveTab> {
                         padding: index == MyCategory.myCategory.length - 1
                             ? EdgeInsets.only(bottom: 90.h)
                             : EdgeInsets.zero,
-                        child: CategoryItem(
-                          index: index,
-                        ),
+                        child: Container(),
                       )
                     : const SizedBox.shrink();
               },

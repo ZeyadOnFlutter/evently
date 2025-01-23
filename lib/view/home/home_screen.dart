@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   static const routeName = '/home';
 
   @override
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const LoveTab(),
     const ProfileTab(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,8 +75,8 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 51.h,
         width: 51.w,
         child: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, CreateEvent.routeName);
+          onPressed: () async {
+           Navigator.pushNamed(context, CreateEvent.routeName);
           },
           child: SvgPicture.asset('assets/icons/add_icon.svg'),
         ),

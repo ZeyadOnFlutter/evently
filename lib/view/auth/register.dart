@@ -154,7 +154,7 @@ class _RegisterState extends State<Register> {
                 SizedBox(
                   height: 16.h,
                 ),
-                LoginButton(
+                DefaultButton(
                   label: 'Create Account',
                   onPressed: () {
                     if (formKey.currentState!.validate()) {}

@@ -23,9 +23,7 @@ class _HomeTabState extends State<HomeTab> {
           },
           currentIndex: currentindex,
         ),
-        HomeBody(
-          currentIndex: currentindex,
-        ),
+        HomeBody(),
       ],
     );
   }

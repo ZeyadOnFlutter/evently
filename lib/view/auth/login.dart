@@ -110,7 +110,7 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 24.h,
                   ),
-                  LoginButton(
+                  DefaultButton(
                     label: 'Login',
                     onPressed: () {
                       if (formKey.currentState!.validate()) {}

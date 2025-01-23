@@ -37,6 +37,11 @@ class _DeafultTextFormFieldState extends State<DeafultTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTapOutside: (event) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      textInputAction: TextInputAction.done,
+      controller: widget.textEditingController,
       onChanged: widget.onChanged,
       cursorColor: Apptheme.primary,
       autovalidateMode: AutovalidateMode.onUserInteraction,
