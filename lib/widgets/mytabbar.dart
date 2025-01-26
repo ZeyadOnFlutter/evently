@@ -6,15 +6,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class Mytabbar extends StatelessWidget {
   Mytabbar({
     required this.isCreateEvent,
-    required this.currentIndex,
-    required this.onTap,
     required this.tabBarLength,
+    this.onTap,
+    this.currentIndex = 0,
     super.key,
   });
   void Function(int)? onTap;
   int tabBarLength;
-  int currentIndex;
   bool isCreateEvent;
+  int currentIndex;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

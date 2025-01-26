@@ -10,19 +10,11 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  int currentindex = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        HomeHeader(
-          onTap: (index) {
-            setState(() {
-              currentindex = index;
-            });
-          },
-          currentIndex: currentindex,
-        ),
+        HomeHeader(),
         HomeBody(),
       ],
     );

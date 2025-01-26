@@ -1,14 +1,21 @@
 import 'package:evently/models/category.dart';
+import 'package:evently/models/event_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/icon_item.dart';
 import 'package:evently/widgets/mytabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
-class HomeHeader extends StatelessWidget {
-  HomeHeader({required this.currentIndex, required this.onTap, super.key});
-  void Function(int)? onTap;
-  int currentIndex;
+class HomeHeader extends StatefulWidget {
+  HomeHeader({super.key});
+
+  @override
+  State<HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<HomeHeader> {
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +111,16 @@ class HomeHeader extends StatelessWidget {
             ),
             const Spacer(),
             Mytabbar(
+              onTap: (index) {
+                setState(() {
+                  currentIndex = index;
+                });
+                // Provider.of<EventProvider>(context, listen: false)
+                //     .changeCategory(
+                //   MyCategory.myCategory[currentIndex],
+                // );
+              },
               currentIndex: currentIndex,
-              onTap: onTap,
               isCreateEvent: false,
               tabBarLength: MyCategory.myCategory.length,
             ),

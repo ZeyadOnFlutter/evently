@@ -1,3 +1,4 @@
+import 'package:evently/models/event_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/login.dart';
 import 'package:evently/view/auth/register.dart';
@@ -7,6 +8,7 @@ import 'package:evently/view/onboard/slider_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -17,8 +19,11 @@ void main() async {
   String seenSlider =
       hasSeenSlider ? HomeScreen.routeName : SliderScreen.routeName;
   runApp(
-    Evently(
-      seenSlider: seenSlider,
+    ChangeNotifierProvider(
+      create: (context) => EventProvider(),
+      child: Evently(
+        seenSlider: seenSlider,
+      ),
     ),
   );
 }
