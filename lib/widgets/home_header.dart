@@ -1,5 +1,5 @@
 import 'package:evently/models/category.dart';
-import 'package:evently/models/event_provider.dart';
+import 'package:evently/providers/event_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/icon_item.dart';
 import 'package:evently/widgets/mytabbar.dart';
@@ -115,10 +115,12 @@ class _HomeHeaderState extends State<HomeHeader> {
                 setState(() {
                   currentIndex = index;
                 });
-                // Provider.of<EventProvider>(context, listen: false)
-                //     .changeCategory(
-                //   MyCategory.myCategory[currentIndex],
-                // );
+                Provider.of<EventProvider>(
+                  context,
+                  listen: false,
+                ).filterEvents(
+                  MyCategory.myCategory[index],
+                );
               },
               currentIndex: currentIndex,
               isCreateEvent: false,

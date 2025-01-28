@@ -1,6 +1,6 @@
 import 'package:evently/models/event.dart';
-import 'package:evently/models/event_provider.dart';
-import 'package:evently/models/firebase_service.dart';
+import 'package:evently/providers/event_provider.dart';
+import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/category_item.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class _HomeBodyState extends State<HomeBody> {
     if (prov.filteredEvents.isEmpty) {
       prov.getEvents();
     }
-    return prov.events.isEmpty
+    return prov.filteredEvents.isEmpty
         ? Padding(
             padding: EdgeInsets.only(top: 50.h),
             child: const CircularProgressIndicator(

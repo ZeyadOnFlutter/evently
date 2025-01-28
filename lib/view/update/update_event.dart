@@ -13,24 +13,25 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class CreateEvent extends StatefulWidget {
-  const CreateEvent({super.key});
+class UpdateEvent extends StatefulWidget {
+  const UpdateEvent({super.key});
 
-  static const String routeName = '/create-event';
+  static const String routeName = '/update-event';
 
   @override
-  State<CreateEvent> createState() => _CreateEventState();
+  State<UpdateEvent> createState() => _UpdateEventState();
 }
 
-class _CreateEventState extends State<CreateEvent> {
+class _UpdateEventState extends State<UpdateEvent> {
   int currentIndex = 0;
   DateTime? selectedDateTime;
   DateFormat dateFormat = DateFormat('dd/MM/yyyy');
   TimeOfDay? timeOfDay;
   MyCategory selectedCategory = MyCategory.myCategory.first;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  late Event event;
+  late TextEditingController titleController;
+  late TextEditingController descriptionController;
 
   String format(BuildContext context, TimeOfDay timeOfDay) {
     final MaterialLocalizations localizations =
@@ -42,7 +43,17 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+    descriptionController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    titleController = TextEditingController(text: event.title);
+    descriptionController = TextEditingController(text: event.description);
+    event = ModalRoute.of(context)?.settings.arguments as Event;
     selectedCategory = MyCategory.myCategory[currentIndex + 1];
     TextStyle? myblackTextTheme = Theme.of(context).textTheme.bodyLarge;
     TextStyle? myblueTextTheme = Theme.of(context)
@@ -57,7 +68,7 @@ class _CreateEventState extends State<CreateEvent> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: const Text('Create Event'),
+          title: const Text('Edit Event'),
         ),
         body: SafeArea(
           child: Column(
@@ -208,7 +219,7 @@ class _CreateEventState extends State<CreateEvent> {
                           ),
                           DefaultButton(
                             onPressed: () {
-                              createEvent(context);
+                              UpdateEvent(context);
                             },
                             label: 'Add',
                           ),
@@ -225,7 +236,7 @@ class _CreateEventState extends State<CreateEvent> {
     );
   }
 
-  void createEvent(BuildContext context) async {
+  void UpdateEvent(BuildContext context) async {
     if (formKey.currentState!.validate() &&
         selectedDateTime != null &&
         timeOfDay != null) {
