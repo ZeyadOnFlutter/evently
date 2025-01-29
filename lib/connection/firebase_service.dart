@@ -47,6 +47,11 @@ class FirebaseService {
     await collectionReference.doc(event.id).delete();
   }
 
+  static Future<void> updateEventFromFireStore(Event event) async {
+    CollectionReference<Event> collectionReference = getEventsCollection();
+    await collectionReference.doc(event.id).update(event.toJson());
+  }
+
   static Future<UserModel> register({
     required String name,
     required String email,
@@ -68,8 +73,10 @@ class FirebaseService {
     return user;
   }
 
-  static Future<UserModel> login(
-      {required String email, required String password}) async {
+  static Future<UserModel> login({
+    required String email,
+    required String password,
+  }) async {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
@@ -79,5 +86,9 @@ class FirebaseService {
     DocumentSnapshot<UserModel> docSnapshot =
         await userCollection.doc(userCredential.user!.uid).get();
     return docSnapshot.data()!;
+  }
+
+  static Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
   }
 }

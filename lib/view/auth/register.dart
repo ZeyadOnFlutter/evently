@@ -1,3 +1,4 @@
+import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/login.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
@@ -57,7 +58,7 @@ class _RegisterState extends State<Register> {
                 ),
                 DeafultTextFormField(
                   borderColor: Apptheme.grey,
-                  textEditingController: emailController,
+                  textEditingController: nameController,
                   hintText: 'Name',
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
@@ -157,7 +158,20 @@ class _RegisterState extends State<Register> {
                 DefaultButton(
                   label: 'Create Account',
                   onPressed: () {
-                    if (formKey.currentState!.validate()) {}
+                    if (formKey.currentState!.validate()) {
+                      FirebaseService.register(
+                        name: nameController.text,
+                        email: emailController.text,
+                        password: passwordController.text,
+                      ).then((user) {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          Login.routeName,
+                        );
+                      }).catchError((error) {
+                        print(error);
+                      });
+                    }
                   },
                 ),
                 SizedBox(

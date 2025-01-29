@@ -1,7 +1,11 @@
+import 'package:evently/connection/firebase_service.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
+import 'package:evently/view/auth/login.dart';
 import 'package:evently/widgets/profile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
@@ -19,7 +23,15 @@ class ProfileTab extends StatelessWidget {
               vertical: 87.h,
             ),
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                FirebaseService.logout().then(
+                  (value) {
+                    Provider.of<UserProvider>(context, listen: false)
+                        .updateUser(null);
+                    Navigator.of(context).pushReplacementNamed(Login.routeName);
+                  },
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Apptheme.red,
                 shape: RoundedRectangleBorder(

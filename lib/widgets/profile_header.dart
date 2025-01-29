@@ -1,6 +1,8 @@
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
@@ -36,11 +38,11 @@ class ProfileHeader extends StatelessWidget {
                 spacing: 10.h,
                 children: [
                   Text(
-                    'John Safwat',
+                    Provider.of<UserProvider>(context).user?.name ?? '',
                     style: Theme.of(context).textTheme.displayMedium!,
                   ),
                   Text(
-                    'johnsafwat.route@gmail.com',
+                    Provider.of<UserProvider>(context).user?.email ?? '',
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: Apptheme.backgroundLight,
                         ),

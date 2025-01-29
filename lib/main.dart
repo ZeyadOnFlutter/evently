@@ -1,4 +1,5 @@
 import 'package:evently/providers/event_provider.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/login.dart';
 import 'package:evently/view/auth/register.dart';
@@ -19,10 +20,17 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool hasSeenSlider = prefs.getBool('endSlider') ?? false;
   String seenSlider =
-      hasSeenSlider ? HomeScreen.routeName : SliderScreen.routeName;
+      hasSeenSlider ? Register.routeName : SliderScreen.routeName;
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => EventProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => EventProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+      ],
       child: Evently(
         seenSlider: seenSlider,
       ),

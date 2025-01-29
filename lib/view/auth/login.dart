@@ -1,11 +1,15 @@
+import 'package:evently/connection/firebase_service.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/register.dart';
+import 'package:evently/view/home/home_screen.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
 import 'package:evently/widgets/login_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -113,7 +117,23 @@ class _LoginState extends State<Login> {
                   DefaultButton(
                     label: 'Login',
                     onPressed: () {
-                      if (formKey.currentState!.validate()) {}
+                      if (formKey.currentState!.validate()) {
+                        FirebaseService.login(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        ).then(
+                          (user) {
+                            Provider.of<UserProvider>(context, listen: false)
+                                .updateUser(user);
+                            Navigator.of(context)
+                                .pushReplacementNamed(HomeScreen.routeName);
+                          },
+                        ).catchError(
+                          (error) {
+                            print(error);
+                          },
+                        );
+                      }
                     },
                   ),
                   SizedBox(

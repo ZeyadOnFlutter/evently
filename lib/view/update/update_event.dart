@@ -3,6 +3,7 @@ import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
 import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/theme/apptheme.dart';
+import 'package:evently/view/home/home_screen.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
 import 'package:evently/widgets/login_button.dart';
 import 'package:evently/widgets/mytabbar.dart';
@@ -29,9 +30,9 @@ class _UpdateEventState extends State<UpdateEvent> {
   TimeOfDay? timeOfDay;
   MyCategory selectedCategory = MyCategory.myCategory.first;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   late Event event;
-  late TextEditingController titleController;
-  late TextEditingController descriptionController;
 
   String format(BuildContext context, TimeOfDay timeOfDay) {
     final MaterialLocalizations localizations =
@@ -51,9 +52,8 @@ class _UpdateEventState extends State<UpdateEvent> {
 
   @override
   Widget build(BuildContext context) {
-    titleController = TextEditingController(text: event.title);
-    descriptionController = TextEditingController(text: event.description);
     event = ModalRoute.of(context)?.settings.arguments as Event;
+
     selectedCategory = MyCategory.myCategory[currentIndex + 1];
     TextStyle? myblackTextTheme = Theme.of(context).textTheme.bodyLarge;
     TextStyle? myblueTextTheme = Theme.of(context)
@@ -115,7 +115,7 @@ class _UpdateEventState extends State<UpdateEvent> {
                           ),
                           DeafultTextFormField(
                             textEditingController: titleController,
-                            hintText: 'Event Title',
+                            hintText: event.title,
                             borderColor: Apptheme.grey,
                             prefixImageName: 'note',
                             validator: (value) {
@@ -131,7 +131,7 @@ class _UpdateEventState extends State<UpdateEvent> {
                           ),
                           DeafultTextFormField(
                             textEditingController: descriptionController,
-                            hintText: 'Event Descriprion',
+                            hintText: event.description,
                             borderColor: Apptheme.grey,
                             maxLines: 4,
                             validator: (value) {
@@ -219,9 +219,9 @@ class _UpdateEventState extends State<UpdateEvent> {
                           ),
                           DefaultButton(
                             onPressed: () {
-                              UpdateEvent(context);
+                              updateEvent(context);
                             },
-                            label: 'Add',
+                            label: 'Update Event',
                           ),
                         ],
                       ),
@@ -236,7 +236,7 @@ class _UpdateEventState extends State<UpdateEvent> {
     );
   }
 
-  void UpdateEvent(BuildContext context) async {
+  void updateEvent(BuildContext context) async {
     if (formKey.currentState!.validate() &&
         selectedDateTime != null &&
         timeOfDay != null) {
@@ -247,13 +247,15 @@ class _UpdateEventState extends State<UpdateEvent> {
         timeOfDay!.hour,
         timeOfDay!.minute,
       );
-      Event event = Event(
+      Event updatedevent = Event(
+        id: event.id,
         category: selectedCategory,
         title: titleController.text,
         description: descriptionController.text,
         dateTime: dateTime,
       );
-      await FirebaseService.addEventToFireStore(event).then(
+
+      await FirebaseService.updateEventFromFireStore(updatedevent).then(
         (value) {
           EventProvider prov =
               Provider.of<EventProvider>(context, listen: false);
@@ -262,13 +264,13 @@ class _UpdateEventState extends State<UpdateEvent> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Event Added Successfully',
+                'Event updated Successfully',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               backgroundColor: Apptheme.primary,
             ),
           );
-          Navigator.of(context).pop();
+          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
         },
       ).catchError((error) {
         print(error.toString());

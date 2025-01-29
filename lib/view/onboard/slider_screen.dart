@@ -1,5 +1,6 @@
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/login.dart';
+import 'package:evently/view/auth/register.dart';
 import 'package:evently/view/home/home_screen.dart';
 import 'package:evently/view/onboard/slider_texts.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +139,7 @@ class _SliderScreenState extends State<SliderScreen> {
                           pref.setBool('endSlider', true);
                           Navigator.pushReplacementNamed(
                             context,
-                            HomeScreen.routeName,
+                            Register.routeName,
                           );
                         } else {
                           pageController.nextPage(

@@ -1,5 +1,6 @@
 import 'package:evently/models/category.dart';
 import 'package:evently/providers/event_provider.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/icon_item.dart';
 import 'package:evently/widgets/mytabbar.dart';
@@ -52,7 +53,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                             .copyWith(color: Apptheme.backgroundLight),
                       ),
                       Text(
-                        'John Safwat',
+                        Provider.of<UserProvider>(context).user!.name,
                         style: Theme.of(context).textTheme.displayMedium!,
                       ),
                     ],
