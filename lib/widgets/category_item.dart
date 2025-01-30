@@ -1,16 +1,23 @@
-import 'package:evently/models/category.dart';
 import 'package:evently/models/event.dart';
+import 'package:evently/providers/event_provider.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/event_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CategoryItem extends StatelessWidget {
   const CategoryItem({required this.event, super.key});
   final Event event;
+
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(
+      context,
+    );
+    bool isFavourite = userProvider.checkIsFavourite(event.id);
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, EventDetails.routeName, arguments: event);
@@ -86,9 +93,25 @@ class CategoryItem extends StatelessWidget {
                   width: 24.w,
                   child: IconButton(
                     padding: EdgeInsets.zero,
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.favorite_border_rounded,
+                    onPressed: () {
+                      if (isFavourite) {
+                        userProvider.removeEventToFavourite(event.id);
+                        Provider.of<EventProvider>(context, listen: false)
+                            .removeEventToFavourite(event.id);
+                        Provider.of<EventProvider>(
+                          context,
+                          listen: false,
+                        ).filterFavourites(userProvider.user!.favouriteIds);
+                      } else {
+                        userProvider.addEventToFavourite(event.id);
+                        Provider.of<EventProvider>(context, listen: false)
+                            .addEventToFavourite(event.id);
+                      }
+                    },
+                    icon: Icon(
+                      isFavourite
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_border_rounded,
                       color: Apptheme.primary,
                     ),
                   ),

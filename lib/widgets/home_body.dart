@@ -18,9 +18,6 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
     EventProvider prov = Provider.of<EventProvider>(context);
-    if (prov.filteredEvents.isEmpty) {
-      prov.getEvents();
-    }
     return prov.filteredEvents.isEmpty
         ? Padding(
             padding: EdgeInsets.only(top: 50.h),

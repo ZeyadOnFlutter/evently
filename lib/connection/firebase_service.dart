@@ -18,7 +18,7 @@ class FirebaseService {
     return FirebaseFirestore.instance.collection('users').withConverter(
           fromFirestore: (snapshot, options) =>
               UserModel.fromJson(snapshot.data()!),
-          toFirestore: (value, options) => value.toJson(),
+          toFirestore: (user, options) => user.toJson(),
         );
   }
 
@@ -90,5 +90,19 @@ class FirebaseService {
 
   static Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  static Future<void> addEventToFavourite(String eventId) async {
+    CollectionReference<UserModel> userCollection = getUserCollection();
+    await userCollection.doc(FirebaseAuth.instance.currentUser!.uid).update({
+      'favouriteIds': FieldValue.arrayUnion([eventId])
+    });
+  }
+
+  static Future<void> deleteEventFromFavourite(String eventId) async {
+    CollectionReference<UserModel> userCollection = getUserCollection();
+    await userCollection.doc(FirebaseAuth.instance.currentUser!.uid).update({
+      'favouriteIds': FieldValue.arrayRemove([eventId])
+    });
   }
 }

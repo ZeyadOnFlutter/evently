@@ -8,4 +8,18 @@ class UserProvider with ChangeNotifier {
     user = usermodel;
     notifyListeners();
   }
+
+  void addEventToFavourite(String eventId) {
+    user!.favouriteIds.add(eventId);
+    notifyListeners();
+  }
+
+  void removeEventToFavourite(String eventId) {
+    user!.favouriteIds.remove(eventId);
+    notifyListeners();
+  }
+
+  bool checkIsFavourite(String eventId) {
+    return user!.favouriteIds.contains(eventId);
+  }
 }

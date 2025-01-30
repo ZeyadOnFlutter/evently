@@ -2,6 +2,7 @@ import 'package:evently/models/category.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
 import 'package:evently/connection/firebase_service.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/home/home_screen.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
@@ -264,6 +265,7 @@ class _UpdateEventState extends State<UpdateEvent>
       );
       Event updatedevent = Event(
         id: event.id,
+        uId: Provider.of<UserProvider>(context, listen: false).user!.id,
         category: selectedCategory,
         title: titleController.text,
         description: descriptionController.text,

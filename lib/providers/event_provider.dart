@@ -8,6 +8,7 @@ class EventProvider extends ChangeNotifier {
   //--------------------------------------------------------
   List<Event> events = [];
   List<Event> filteredEvents = [];
+  List<Event> filteredFavourites = [];
   MyCategory selectedCategory = MyCategory.myCategory.first;
 
   Future<void> getEvents() async {
@@ -32,6 +33,24 @@ class EventProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> addEventToFavourite(String eventId) async {
+    await FirebaseService.addEventToFavourite(eventId);
+  }
+
+  Future<void> removeEventToFavourite(String eventId) async {
+    await FirebaseService.deleteEventFromFavourite(eventId);
+  }
+
+  void filterFavourites(List<String> favouriteIds) {
+    filteredFavourites = events.where(
+      (event) {
+        return favouriteIds.contains(event.id);
+      },
+    ).toList();
+    notifyListeners();
+  }
+
   //------------------------------------------------------------------
   //Server Side
   //------------------------------------------------------------------

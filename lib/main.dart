@@ -25,7 +25,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => EventProvider(),
+          create: (context) => EventProvider()..getEvents(),
         ),
         ChangeNotifierProvider(
           create: (context) => UserProvider(),

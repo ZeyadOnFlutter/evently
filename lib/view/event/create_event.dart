@@ -2,6 +2,7 @@ import 'package:evently/models/category.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
 import 'package:evently/connection/firebase_service.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
 import 'package:evently/widgets/login_button.dart';
@@ -237,6 +238,7 @@ class _CreateEventState extends State<CreateEvent> {
         timeOfDay!.minute,
       );
       Event event = Event(
+        uId: Provider.of<UserProvider>(context, listen: false).user!.id,
         category: selectedCategory,
         title: titleController.text,
         description: descriptionController.text,
