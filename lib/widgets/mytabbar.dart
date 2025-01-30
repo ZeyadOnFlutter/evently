@@ -7,6 +7,7 @@ class Mytabbar extends StatelessWidget {
   Mytabbar({
     required this.isCreateEvent,
     required this.tabBarLength,
+    this.tabController,
     this.onTap,
     this.currentIndex = 0,
     super.key,
@@ -15,11 +16,13 @@ class Mytabbar extends StatelessWidget {
   int tabBarLength;
   bool isCreateEvent;
   int currentIndex;
+  TabController? tabController;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: tabBarLength,
       child: TabBar(
+        controller: tabController,
         dividerColor: Colors.transparent,
         indicatorColor: Colors.transparent,
         isScrollable: true,

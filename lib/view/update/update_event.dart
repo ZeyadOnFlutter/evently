@@ -23,8 +23,8 @@ class UpdateEvent extends StatefulWidget {
   State<UpdateEvent> createState() => _UpdateEventState();
 }
 
-class _UpdateEventState extends State<UpdateEvent> {
-  int currentIndex = 0;
+class _UpdateEventState extends State<UpdateEvent>
+    with SingleTickerProviderStateMixin {
   DateTime? selectedDateTime;
   DateFormat dateFormat = DateFormat('dd/MM/yyyy');
   TimeOfDay? timeOfDay;
@@ -33,7 +33,9 @@ class _UpdateEventState extends State<UpdateEvent> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   late Event event;
-
+  late int currentIndex;
+  late TabController tabController;
+  bool isAssigned = false;
   String format(BuildContext context, TimeOfDay timeOfDay) {
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);
@@ -41,6 +43,13 @@ class _UpdateEventState extends State<UpdateEvent> {
       timeOfDay,
       alwaysUse24HourFormat: false,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    tabController =
+        TabController(length: MyCategory.myCategory.length - 1, vsync: this);
   }
 
   @override
@@ -53,6 +62,11 @@ class _UpdateEventState extends State<UpdateEvent> {
   @override
   Widget build(BuildContext context) {
     event = ModalRoute.of(context)?.settings.arguments as Event;
+    if (!isAssigned) {
+      currentIndex = currentIndex = int.parse(event.category.id) - 1;
+      tabController.index = int.parse(event.category.id) - 1;
+      isAssigned = true;
+    }
 
     selectedCategory = MyCategory.myCategory[currentIndex + 1];
     TextStyle? myblackTextTheme = Theme.of(context).textTheme.bodyLarge;
@@ -88,6 +102,7 @@ class _UpdateEventState extends State<UpdateEvent> {
                 ),
               ),
               Mytabbar(
+                tabController: tabController,
                 currentIndex: currentIndex,
                 onTap: (index) {
                   setState(() {
