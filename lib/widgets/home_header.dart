@@ -1,5 +1,6 @@
 import 'package:evently/models/category.dart';
 import 'package:evently/providers/event_provider.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/icon_item.dart';
@@ -20,12 +21,13 @@ class _HomeHeaderState extends State<HomeHeader> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return Container(
       width: double.infinity,
       height: 198.h,
       clipBehavior: Clip.none,
       decoration: BoxDecoration(
-        color: Apptheme.primary,
+        color: isDark ? Apptheme.backgroundDark : Apptheme.primary,
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(24.r),
         ),
@@ -79,7 +81,9 @@ class _HomeHeaderState extends State<HomeHeader> {
                         style:
                             Theme.of(context).textTheme.displayMedium!.copyWith(
                                   fontSize: 14,
-                                  color: Apptheme.primary,
+                                  color: isDark
+                                      ? Apptheme.backgroundDark
+                                      : Apptheme.primary,
                                 ),
                       ),
                     ),

@@ -23,7 +23,7 @@ class Apptheme {
         fontWeight: FontWeight.w400,
         color: primary,
       ),
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: Apptheme.primary,
       ),
     ),
@@ -46,7 +46,7 @@ class Apptheme {
       showSelectedLabels: true,
       showUnselectedLabels: true,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: primary,
       foregroundColor: backgroundLight,
       shape: CircleBorder(),
@@ -84,5 +84,78 @@ class Apptheme {
       ),
     ),
   );
-  static ThemeData darkTheme = ThemeData();
+  static ThemeData darkTheme = ThemeData(
+    primaryColor: primary,
+    scaffoldBackgroundColor: backgroundDark,
+    appBarTheme: AppBarTheme(
+      backgroundColor: backgroundDark,
+      foregroundColor: primary,
+      centerTitle: true,
+      surfaceTintColor: backgroundDark,
+      titleTextStyle: GoogleFonts.inter(
+        fontSize: 24.sp,
+        fontWeight: FontWeight.w400,
+        color: primary,
+      ),
+      iconTheme: const IconThemeData(
+        color: Apptheme.primary,
+      ),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: backgroundDark,
+      elevation: 0,
+      type: BottomNavigationBarType.fixed,
+      selectedLabelStyle: GoogleFonts.inter(
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w700,
+        color: Apptheme.backgroundLight,
+      ),
+      selectedItemColor: Apptheme.backgroundLight,
+      unselectedItemColor: Apptheme.backgroundLight,
+      unselectedLabelStyle: GoogleFonts.inter(
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w700,
+        color: Apptheme.backgroundLight,
+      ),
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: backgroundDark,
+      foregroundColor: backgroundLight,
+      shape: CircleBorder(),
+    ),
+    textTheme: TextTheme(
+      labelSmall: GoogleFonts.inter(
+        fontSize: 10,
+        fontWeight: FontWeight.w400,
+        color: white,
+      ),
+      bodySmall: GoogleFonts.inter(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: white,
+      ),
+      bodyMedium: GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: white,
+      ),
+      bodyLarge: GoogleFonts.inter(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: white,
+      ),
+      titleLarge: GoogleFonts.inter(
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+        color: white,
+      ),
+      displayMedium: GoogleFonts.inter(
+        fontSize: 24,
+        fontWeight: FontWeight.w700,
+        color: white,
+      ),
+    ),
+  );
 }

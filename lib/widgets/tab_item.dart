@@ -1,7 +1,9 @@
 import 'package:evently/models/category.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class TabItem extends StatelessWidget {
   TabItem({
@@ -15,6 +17,7 @@ class TabItem extends StatelessWidget {
   bool isCreateEvent;
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       margin: EdgeInsets.only(right: 10.w),
@@ -24,13 +27,19 @@ class TabItem extends StatelessWidget {
                 ? Apptheme.primary
                 : Colors.transparent
             : isSelected
-                ? Apptheme.backgroundLight
+                ? isDark
+                    ? Apptheme.primary
+                    : Apptheme.backgroundLight
                 : Colors.transparent,
         borderRadius: BorderRadius.all(
           Radius.circular(46.r),
         ),
         border: Border.all(
-          color: isCreateEvent ? Apptheme.primary : Apptheme.backgroundLight,
+          color: isCreateEvent
+              ? Apptheme.primary
+              : isDark
+                  ? Apptheme.primary
+                  : Apptheme.backgroundLight,
         ),
       ),
       child: Row(
@@ -39,10 +48,14 @@ class TabItem extends StatelessWidget {
             myCategory.iconName,
             color: isCreateEvent
                 ? isSelected
-                    ? Apptheme.backgroundLight
+                    ? isDark
+                        ? Color(0xFF101127)
+                        : Apptheme.backgroundLight
                     : Apptheme.primary
                 : isSelected
-                    ? Apptheme.primary
+                    ? isDark
+                        ? Apptheme.backgroundLight
+                        : Apptheme.primary
                     : Apptheme.backgroundLight,
           ),
           SizedBox(
@@ -53,10 +66,14 @@ class TabItem extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: isCreateEvent
                       ? isSelected
-                          ? Apptheme.backgroundLight
+                          ? isDark
+                              ? Color(0xFF101127)
+                              : Apptheme.backgroundLight
                           : Apptheme.primary
                       : isSelected
-                          ? Apptheme.primary
+                          ? isDark
+                              ? Apptheme.backgroundLight
+                              : Apptheme.primary
                           : Apptheme.backgroundLight,
                 ),
           ),

@@ -1,13 +1,16 @@
 import 'package:evently/connection/firebase_service.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/register.dart';
 import 'package:evently/view/home/home_screen.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
 import 'package:evently/widgets/login_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +35,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -48,14 +52,14 @@ class _LoginState extends State<Login> {
                     height: 24.h,
                   ),
                   DeafultTextFormField(
-                    borderColor: Apptheme.grey,
+                    borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                     textEditingController: emailController,
                     hintText: 'Email',
                     prefixImageName: 'email',
                     textStyle: GoogleFonts.inter(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
-                      color: Apptheme.grey,
+                      color: isDark ? Apptheme.white : Apptheme.grey,
                     ),
                     textInputType: TextInputType.emailAddress,
                     validator: (value) {
@@ -74,14 +78,14 @@ class _LoginState extends State<Login> {
                     height: 16.h,
                   ),
                   DeafultTextFormField(
-                    borderColor: Apptheme.grey,
+                    borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                     textEditingController: passwordController,
                     isPassword: true,
                     hintText: 'Password',
                     textStyle: GoogleFonts.inter(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
-                      color: Apptheme.grey,
+                      color: isDark ? Apptheme.white : Apptheme.grey,
                     ),
                     textInputType: TextInputType.text,
                     prefixImageName: 'lock',
@@ -130,7 +134,17 @@ class _LoginState extends State<Login> {
                           },
                         ).catchError(
                           (error) {
-                            print(error);
+                            if (error is FirebaseAuthException) {
+                              Fluttertoast.showToast(
+                                msg: error.message!,
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0,
+                              );
+                            }
                           },
                         );
                       }

@@ -1,7 +1,9 @@
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class DeafultTextFormField extends StatefulWidget {
   const DeafultTextFormField({
@@ -53,6 +55,12 @@ class _DeafultTextFormFieldState extends State<DeafultTextFormField> {
             ? SvgPicture.asset(
                 'assets/icons/${widget.prefixImageName}.svg',
                 fit: BoxFit.scaleDown,
+                colorFilter: ColorFilter.mode(
+                  Provider.of<SettingsProvider>(context).isDark
+                      ? Apptheme.white
+                      : Apptheme.grey,
+                  BlendMode.srcIn,
+                ),
               )
             : null,
         suffixIcon: widget.isPassword
@@ -64,7 +72,9 @@ class _DeafultTextFormFieldState extends State<DeafultTextFormField> {
                 },
                 icon: Icon(
                   isObscure ? Icons.visibility_off : Icons.visibility,
-                  color: Apptheme.grey,
+                  color: Provider.of<SettingsProvider>(context).isDark
+                      ? Apptheme.white
+                      : Apptheme.grey,
                 ),
               )
             : null,

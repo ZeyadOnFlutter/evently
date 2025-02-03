@@ -1,3 +1,4 @@
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/login.dart';
 import 'package:evently/view/auth/register.dart';
@@ -6,6 +7,7 @@ import 'package:evently/view/onboard/slider_texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -28,6 +30,7 @@ class _SliderScreenState extends State<SliderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -109,9 +112,13 @@ class _SliderScreenState extends State<SliderScreen> {
                                 curve: Curves.easeIn,
                               );
                             },
-                            child: SvgPicture.asset(
-                              'assets/icons/rightarrow.svg',
-                            ),
+                            child: isDark
+                                ? SvgPicture.asset(
+                                    'assets/icons/arrowleft.svg',
+                                  )
+                                : SvgPicture.asset(
+                                    'assets/icons/rightarrow.svg',
+                                  ),
                           ),
                     SmoothPageIndicator(
                       controller: pageController,
@@ -127,7 +134,7 @@ class _SliderScreenState extends State<SliderScreen> {
                       effect: ExpandingDotsEffect(
                         dotHeight: 8.h,
                         dotWidth: 8.h,
-                        dotColor: Apptheme.black,
+                        dotColor: isDark ? Apptheme.white : Apptheme.black,
                         activeDotColor: Apptheme.primary,
                       ),
                     ),
@@ -148,9 +155,13 @@ class _SliderScreenState extends State<SliderScreen> {
                           );
                         }
                       },
-                      child: SvgPicture.asset(
-                        'assets/icons/leftarrow.svg',
-                      ),
+                      child: isDark
+                          ? SvgPicture.asset(
+                              'assets/icons/arrowright.svg',
+                            )
+                          : SvgPicture.asset(
+                              'assets/icons/leftarrow.svg',
+                            ),
                     ),
                   ],
                 ),

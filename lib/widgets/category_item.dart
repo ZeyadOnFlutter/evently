@@ -1,5 +1,6 @@
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/event_details.dart';
@@ -14,9 +15,10 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(
-      context,
-    );
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    EventProvider eventProvider =
+        Provider.of<EventProvider>(context, listen: false);
     bool isFavourite = userProvider.checkIsFavourite(event.id);
     return InkWell(
       onTap: () {
@@ -25,14 +27,19 @@ class CategoryItem extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                16.r,
+          Container(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  16.r,
+                ),
               ),
             ),
             child: Image.asset(
-              'assets/images/${event.category.imageName}.png',
+              isDark
+                  ? 'assets/images/${event.category.imageName}dark.png'
+                  : 'assets/images/${event.category.imageName}.png',
             ),
           ),
           Positioned(
@@ -41,7 +48,8 @@ class CategoryItem extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(8.r),
               decoration: BoxDecoration(
-                color: Apptheme.backgroundLight,
+                color:
+                    isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                 borderRadius: BorderRadius.all(
                   Radius.circular(8.r),
                 ),
@@ -73,7 +81,8 @@ class CategoryItem extends StatelessWidget {
             ),
             margin: EdgeInsets.all(8.r),
             decoration: BoxDecoration(
-              color: Apptheme.backgroundLight,
+              color:
+                  isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Row(
@@ -84,7 +93,10 @@ class CategoryItem extends StatelessWidget {
                     event.description,
                     style: Theme.of(context).textTheme.displayMedium!.copyWith(
                           fontSize: 14,
-                          color: Apptheme.black,
+                          color: isDark
+                              ? Apptheme.backgroundLight
+                              : Apptheme.black,
+                          height: 1.35.h,
                         ),
                   ),
                 ),
@@ -96,16 +108,12 @@ class CategoryItem extends StatelessWidget {
                     onPressed: () {
                       if (isFavourite) {
                         userProvider.removeEventToFavourite(event.id);
-                        Provider.of<EventProvider>(context, listen: false)
-                            .removeEventToFavourite(event.id);
-                        Provider.of<EventProvider>(
-                          context,
-                          listen: false,
-                        ).filterFavourites(userProvider.user!.favouriteIds);
+                        eventProvider.removeEventToFavourite(event.id);
+                        eventProvider
+                            .filterFavourites(userProvider.user!.favouriteIds);
                       } else {
                         userProvider.addEventToFavourite(event.id);
-                        Provider.of<EventProvider>(context, listen: false)
-                            .addEventToFavourite(event.id);
+                        eventProvider.addEventToFavourite(event.id);
                       }
                     },
                     icon: Icon(

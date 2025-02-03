@@ -1,3 +1,4 @@
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/event/create_event.dart';
 import 'package:evently/view/tabs/home_tab.dart';
@@ -8,6 +9,7 @@ import 'package:evently/widgets/icon_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -76,8 +78,16 @@ class _HomeScreenState extends State<HomeScreen> {
         width: 51.w,
         child: FloatingActionButton(
           onPressed: () async {
-           Navigator.pushNamed(context, CreateEvent.routeName);
+            Navigator.pushNamed(context, CreateEvent.routeName);
           },
+          shape: CircleBorder(
+            side: BorderSide(
+              color: Provider.of<SettingsProvider>(context).isDark
+                  ? Colors.white
+                  : Colors.transparent,
+              width: 5,
+            ),
+          ),
           child: SvgPicture.asset('assets/icons/add_icon.svg'),
         ),
       ),

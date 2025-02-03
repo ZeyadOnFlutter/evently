@@ -11,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -249,20 +250,29 @@ class _CreateEventState extends State<CreateEvent> {
           EventProvider prov =
               Provider.of<EventProvider>(context, listen: false);
           prov.getEvents();
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Event Added Successfully',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              backgroundColor: Apptheme.primary,
-            ),
+          Fluttertoast.showToast(
+            msg: "Event Created Successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Apptheme.red,
+            textColor: Colors.white,
+            fontSize: 16.0,
           );
           Navigator.of(context).pop();
         },
       ).catchError((error) {
-        print(error.toString());
+        if (error is FirebaseException) {
+          Fluttertoast.showToast(
+            msg: error.toString(),
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Apptheme.primary,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
       });
     } else {
       showDialog(

@@ -12,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -290,7 +291,17 @@ class _UpdateEventState extends State<UpdateEvent>
           Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
         },
       ).catchError((error) {
-        print(error.toString());
+        if (error is FirebaseException) {
+          Fluttertoast.showToast(
+            msg: error.toString(),
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Apptheme.primary,
+            textColor: Colors.red,
+            fontSize: 16.0,
+          );
+        }
       });
     } else {
       showDialog(

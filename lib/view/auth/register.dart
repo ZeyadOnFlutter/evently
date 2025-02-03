@@ -1,12 +1,16 @@
 import 'package:evently/connection/firebase_service.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/login.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
 import 'package:evently/widgets/login_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -33,13 +37,13 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Register',
           style: GoogleFonts.inter(
             fontSize: 24.sp,
-            color: Apptheme.black,
           ),
         ),
       ),
@@ -57,13 +61,13 @@ class _RegisterState extends State<Register> {
                   height: 24.h,
                 ),
                 DeafultTextFormField(
-                  borderColor: Apptheme.grey,
+                  borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: nameController,
                   hintText: 'Name',
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
-                    color: Apptheme.grey,
+                    color: isDark ? Apptheme.white : Apptheme.grey,
                   ),
                   prefixImageName: 'user',
                   textInputType: TextInputType.name,
@@ -80,13 +84,13 @@ class _RegisterState extends State<Register> {
                   height: 24.h,
                 ),
                 DeafultTextFormField(
-                  borderColor: Apptheme.grey,
+                  borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: emailController,
                   hintText: 'Email',
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
-                    color: Apptheme.grey,
+                    color: isDark ? Apptheme.white : Apptheme.grey,
                   ),
                   prefixImageName: 'email',
                   textInputType: TextInputType.emailAddress,
@@ -106,14 +110,14 @@ class _RegisterState extends State<Register> {
                   height: 16.h,
                 ),
                 DeafultTextFormField(
-                  borderColor: Apptheme.grey,
+                  borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: passwordController,
                   isPassword: true,
                   hintText: 'Password',
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
-                    color: Apptheme.grey,
+                    color: isDark ? Apptheme.white : Apptheme.grey,
                   ),
                   textInputType: TextInputType.text,
                   prefixImageName: 'lock',
@@ -130,7 +134,7 @@ class _RegisterState extends State<Register> {
                   height: 16.h,
                 ),
                 DeafultTextFormField(
-                  borderColor: Apptheme.grey,
+                  borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: repasswordController,
                   isPassword: true,
                   hintText: 'Re Password',
@@ -139,7 +143,7 @@ class _RegisterState extends State<Register> {
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
-                    color: Apptheme.grey,
+                    color: isDark ? Apptheme.white : Apptheme.grey,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -169,7 +173,17 @@ class _RegisterState extends State<Register> {
                           Login.routeName,
                         );
                       }).catchError((error) {
-                        print(error);
+                        if (error is FirebaseAuthException) {
+                          Fluttertoast.showToast(
+                            msg: error.message!,
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Apptheme.primary,
+                            textColor: Colors.red,
+                            fontSize: 16.0,
+                          );
+                        }
                       });
                     }
                   },

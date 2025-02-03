@@ -1,4 +1,5 @@
 import 'package:evently/providers/event_provider.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/login.dart';
@@ -24,6 +25,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (context) => SettingsProvider(),
+        ),
         ChangeNotifierProvider(
           create: (context) => EventProvider()..getEvents(),
         ),
@@ -52,7 +56,7 @@ class Evently extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: Apptheme.lightTheme,
           darkTheme: Apptheme.darkTheme,
-          themeMode: ThemeMode.light,
+          themeMode: Provider.of<SettingsProvider>(context).themeMode,
           routes: {
             Login.routeName: (_) => const Login(),
             Register.routeName: (_) => const Register(),

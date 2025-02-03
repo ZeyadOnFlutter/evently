@@ -37,6 +37,7 @@ dependencies:
   flutter_native_splash: ^2.4.4
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.0.17
+  fluttertoast: ^8.2.10
   google_fonts: ^6.2.1
   intl: ^0.20.1
   provider: ^6.1.2
