@@ -1,6 +1,7 @@
 import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/update/update_event.dart';
 import 'package:evently/widgets/eventdetails_calendaritem.dart';
@@ -19,6 +20,7 @@ class EventDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     event = ModalRoute.of(context)?.settings.arguments as Event;
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +71,9 @@ class EventDetails extends StatelessWidget {
                 ),
               ),
               child: Image.asset(
-                'assets/images/${event.category.imageName}.png',
+                isDark
+                    ? 'assets/images/${event.category.imageName}dark.png'
+                    : 'assets/images/${event.category.imageName}.png',
               ),
             ),
             Text(

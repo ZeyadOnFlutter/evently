@@ -2,6 +2,7 @@ import 'package:evently/models/category.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
 import 'package:evently/connection/firebase_service.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/home/home_screen.dart';
@@ -63,6 +64,7 @@ class _UpdateEventState extends State<UpdateEvent>
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     event = ModalRoute.of(context)?.settings.arguments as Event;
     if (!isAssigned) {
       currentIndex = currentIndex = int.parse(event.category.id) - 1;
@@ -135,6 +137,7 @@ class _UpdateEventState extends State<UpdateEvent>
                             hintText: event.title,
                             borderColor: Apptheme.grey,
                             prefixImageName: 'note',
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please Enter Event Title';
@@ -150,6 +153,7 @@ class _UpdateEventState extends State<UpdateEvent>
                             textEditingController: descriptionController,
                             hintText: event.description,
                             borderColor: Apptheme.grey,
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
                             maxLines: 4,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -163,6 +167,12 @@ class _UpdateEventState extends State<UpdateEvent>
                             children: [
                               SvgPicture.asset(
                                 'assets/icons/calendar.svg',
+                                colorFilter: ColorFilter.mode(
+                                  isDark
+                                      ? Apptheme.backgroundLight
+                                      : Apptheme.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                               Text(
                                 'Event Date',
@@ -199,6 +209,12 @@ class _UpdateEventState extends State<UpdateEvent>
                             children: [
                               SvgPicture.asset(
                                 'assets/icons/clock.svg',
+                                colorFilter: ColorFilter.mode(
+                                  isDark
+                                      ? Apptheme.backgroundLight
+                                      : Apptheme.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                               Text(
                                 'Event Time',

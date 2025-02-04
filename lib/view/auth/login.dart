@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -119,7 +120,7 @@ class _LoginState extends State<Login> {
                     height: 24.h,
                   ),
                   DefaultButton(
-                    label: 'Login',
+                    label: AppLocalizations.of(context)!.login,
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         FirebaseService.login(

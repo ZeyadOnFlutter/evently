@@ -17,6 +17,7 @@ class DeafultTextFormField extends StatefulWidget {
     this.textStyle,
     required this.borderColor,
     this.maxLines = 1,
+    this.isSearch = false,
     super.key,
   });
   final TextEditingController? textEditingController;
@@ -29,6 +30,7 @@ class DeafultTextFormField extends StatefulWidget {
   final TextStyle? textStyle;
   final Color borderColor;
   final int? maxLines;
+  final bool isSearch;
 
   @override
   State<DeafultTextFormField> createState() => _DeafultTextFormFieldState();
@@ -56,9 +58,13 @@ class _DeafultTextFormFieldState extends State<DeafultTextFormField> {
                 'assets/icons/${widget.prefixImageName}.svg',
                 fit: BoxFit.scaleDown,
                 colorFilter: ColorFilter.mode(
-                  Provider.of<SettingsProvider>(context).isDark
-                      ? Apptheme.white
-                      : Apptheme.grey,
+                  widget.isSearch
+                      ? Provider.of<SettingsProvider>(context).isDark
+                          ? Apptheme.primary
+                          : Apptheme.primary
+                      : Provider.of<SettingsProvider>(context).isDark
+                          ? Apptheme.white
+                          : Apptheme.grey,
                   BlendMode.srcIn,
                 ),
               )

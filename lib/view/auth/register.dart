@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -160,7 +161,7 @@ class _RegisterState extends State<Register> {
                   height: 16.h,
                 ),
                 DefaultButton(
-                  label: 'Create Account',
+                  label: AppLocalizations.of(context)!.register,
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       FirebaseService.register(

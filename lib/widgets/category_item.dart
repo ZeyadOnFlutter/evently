@@ -28,18 +28,27 @@ class CategoryItem extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           Container(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
                 Radius.circular(
                   16.r,
                 ),
               ),
+              border: Border.all(
+                color: isDark ? Apptheme.primary : Colors.transparent,
+              ),
             ),
-            child: Image.asset(
-              isDark
-                  ? 'assets/images/${event.category.imageName}dark.png'
-                  : 'assets/images/${event.category.imageName}.png',
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  16.r,
+                ),
+              ),
+              child: Image.asset(
+                isDark
+                    ? 'assets/images/${event.category.imageName}dark.png'
+                    : 'assets/images/${event.category.imageName}.png',
+              ),
             ),
           ),
           Positioned(

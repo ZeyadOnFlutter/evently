@@ -2,6 +2,7 @@ import 'package:evently/models/category.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
 import 'package:evently/connection/firebase_service.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -45,6 +47,7 @@ class _CreateEventState extends State<CreateEvent> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     selectedCategory = MyCategory.myCategory[currentIndex + 1];
     TextStyle? myblackTextTheme = Theme.of(context).textTheme.bodyLarge;
     TextStyle? myblueTextTheme = Theme.of(context)
@@ -71,7 +74,9 @@ class _CreateEventState extends State<CreateEvent> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16.r),
                   child: Image.asset(
-                    'assets/images/${selectedCategory.imageName}.png',
+                    isDark
+                        ? 'assets/images/${selectedCategory.imageName}dark.png'
+                        : 'assets/images/${selectedCategory.imageName}.png',
                     height: 203.h,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -107,7 +112,9 @@ class _CreateEventState extends State<CreateEvent> {
                           DeafultTextFormField(
                             textEditingController: titleController,
                             hintText: 'Event Title',
-                            borderColor: Apptheme.grey,
+                            borderColor:
+                                isDark ? Apptheme.primary : Apptheme.grey,
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
                             prefixImageName: 'note',
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -123,7 +130,9 @@ class _CreateEventState extends State<CreateEvent> {
                           DeafultTextFormField(
                             textEditingController: descriptionController,
                             hintText: 'Event Descriprion',
-                            borderColor: Apptheme.grey,
+                            borderColor:
+                                isDark ? Apptheme.primary : Apptheme.grey,
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
                             maxLines: 4,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -137,6 +146,12 @@ class _CreateEventState extends State<CreateEvent> {
                             children: [
                               SvgPicture.asset(
                                 'assets/icons/calendar.svg',
+                                colorFilter: ColorFilter.mode(
+                                  isDark
+                                      ? Apptheme.backgroundLight
+                                      : Apptheme.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                               Text(
                                 'Event Date',
@@ -173,6 +188,12 @@ class _CreateEventState extends State<CreateEvent> {
                             children: [
                               SvgPicture.asset(
                                 'assets/icons/clock.svg',
+                                colorFilter: ColorFilter.mode(
+                                  isDark
+                                      ? Apptheme.backgroundLight
+                                      : Apptheme.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                               Text(
                                 'Event Time',

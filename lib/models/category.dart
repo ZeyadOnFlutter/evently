@@ -73,20 +73,4 @@ class MyCategory {
       imageName: 'bookclub',
     ),
   ];
-  static List<int> searchCategory = List.generate(
-    MyCategory.myCategory.length,
-    (index) {
-      return index + 1;
-    },
-  );
-  static void onSearch(String query) {
-    searchCategory.clear();
-    for (int i = 0; i < MyCategory.myCategory.length; i++) {
-      if (MyCategory.myCategory[i].categoryName
-          .toLowerCase()
-          .contains(query.toLowerCase())) {
-        searchCategory.add(i);
-      }
-    }
-  }
 }

@@ -1,10 +1,8 @@
-import 'package:evently/models/category.dart';
 import 'package:evently/providers/event_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/category_item.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
-import 'package:evently/widgets/home_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,9 +17,11 @@ class LoveTab extends StatefulWidget {
 
 class _LoveTabState extends State<LoveTab> {
   late EventProvider eventProvider;
+  List<int> searchList = [];
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         List<String> favouriteIds =
@@ -29,6 +29,10 @@ class _LoveTabState extends State<LoveTab> {
                 .user!
                 .favouriteIds;
         eventProvider.filterFavourites(favouriteIds);
+        searchList = List.generate(
+          eventProvider.filteredFavourites.length,
+          (index) => index,
+        );
       },
     );
   }
@@ -50,6 +54,7 @@ class _LoveTabState extends State<LoveTab> {
               right: 16.w,
             ),
             child: DeafultTextFormField(
+              isSearch: true,
               hintText: 'Search For Event',
               borderColor: Apptheme.primary,
               textStyle: GoogleFonts.inter(
@@ -58,9 +63,7 @@ class _LoveTabState extends State<LoveTab> {
                 color: Apptheme.primary,
               ),
               onChanged: (query) {
-                MyCategory.onSearch(query);
-                print(MyCategory.searchCategory);
-                print(MyCategory.searchCategory.length);
+                onSearch(query);
               },
               prefixImageName: 'searchicon',
               textInputType: TextInputType.text,
@@ -69,9 +72,11 @@ class _LoveTabState extends State<LoveTab> {
           Expanded(
             child: ListView.separated(
               separatorBuilder: (context, index) {
-                return SizedBox(
-                  height: 16.h,
-                );
+                return searchList.contains(index)
+                    ? SizedBox(
+                        height: 16.h,
+                      )
+                    : SizedBox.shrink();
               },
               itemCount: eventProvider.filteredFavourites.length,
               padding: EdgeInsets.symmetric(
@@ -79,14 +84,37 @@ class _LoveTabState extends State<LoveTab> {
                 vertical: 16.h,
               ),
               itemBuilder: (context, index) {
-                return CategoryItem(
-                  event: eventProvider.filteredFavourites[index],
-                );
+                return searchList.contains(index)
+                    ? Padding(
+                        padding:
+                            index == eventProvider.filteredFavourites.length - 1
+                                ? EdgeInsets.only(bottom: 75.h)
+                                : EdgeInsets.zero,
+                        child: CategoryItem(
+                          event: eventProvider.filteredFavourites[index],
+                        ),
+                      )
+                    : SizedBox.shrink();
               },
             ),
           )
         ],
       ),
     );
+  }
+
+  void onSearch(String query) {
+    searchList.clear();
+    for (int i = 0; i < eventProvider.filteredFavourites.length; i++) {
+      if (eventProvider.filteredFavourites[i].description
+              .toLowerCase()
+              .contains(query.toLowerCase()) ||
+          eventProvider.filteredFavourites[i].category.categoryName
+              .toLowerCase()
+              .contains(query.toLowerCase())) {
+        searchList.add(i);
+      }
+    }
+    setState(() {});
   }
 }

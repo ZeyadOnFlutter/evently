@@ -1,3 +1,4 @@
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +10,10 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return Container(
       decoration: BoxDecoration(
-        color: Apptheme.primary,
+        color: isDark ? Apptheme.backgroundDark : Apptheme.primary,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(64.r),
         ),

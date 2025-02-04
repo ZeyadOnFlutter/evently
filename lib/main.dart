@@ -11,9 +11,11 @@ import 'package:evently/view/update/update_event.dart';
 import 'package:evently/widgets/event_details.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +59,9 @@ class Evently extends StatelessWidget {
           theme: Apptheme.lightTheme,
           darkTheme: Apptheme.darkTheme,
           themeMode: Provider.of<SettingsProvider>(context).themeMode,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: Locale(Provider.of<SettingsProvider>(context).languageCode),
           routes: {
             Login.routeName: (_) => const Login(),
             Register.routeName: (_) => const Register(),

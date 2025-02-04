@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const HomeTab(),
     const MapTab(),
     const LoveTab(),
-    const ProfileTab(),
+    ProfileTab(),
   ];
 
   @override
