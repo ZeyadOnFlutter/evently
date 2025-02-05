@@ -24,11 +24,14 @@ void main() async {
   bool hasSeenSlider = prefs.getBool('endSlider') ?? false;
   String seenSlider =
       hasSeenSlider ? Register.routeName : SliderScreen.routeName;
+  String lang = prefs.getString('lang') ?? 'en';
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => SettingsProvider(),
+          create: (context) => SettingsProvider()
+            ..loadString()
+            ..loadTheme(),
         ),
         ChangeNotifierProvider(
           create: (context) => EventProvider()..getEvents(),
@@ -39,14 +42,16 @@ void main() async {
       ],
       child: Evently(
         seenSlider: seenSlider,
+        lang: lang,
       ),
     ),
   );
 }
 
 class Evently extends StatelessWidget {
-  const Evently({required this.seenSlider, super.key});
+  const Evently({required this.lang, required this.seenSlider, super.key});
   final String seenSlider;
+  final String lang;
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(

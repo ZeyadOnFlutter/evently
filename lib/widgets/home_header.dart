@@ -61,9 +61,18 @@ class _HomeHeaderState extends State<HomeHeader> {
                     ],
                   ),
                   const Spacer(),
-                  const Icon(
-                    Icons.wb_sunny_outlined,
-                    color: Apptheme.backgroundLight,
+                  InkWell(
+                    onTap: () {
+                      SettingsProvider settingsProvider =
+                          Provider.of<SettingsProvider>(context, listen: false);
+                      settingsProvider.isDark
+                          ? settingsProvider.changeTheme(ThemeMode.light)
+                          : settingsProvider.changeTheme(ThemeMode.dark);
+                    },
+                    child: Icon(
+                      Icons.wb_sunny_outlined,
+                      color: Apptheme.backgroundLight,
+                    ),
                   ),
                   SizedBox(
                     width: 10.w,

@@ -16,6 +16,7 @@ void main() {
     await tester.pumpWidget(
       const Evently(
         seenSlider: '',
+        lang: '',
       ),
     );
 

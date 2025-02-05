@@ -7,13 +7,21 @@ import 'package:evently/widgets/profile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileTab extends StatelessWidget {
+class ProfileTab extends StatefulWidget {
   ProfileTab({super.key});
+
+  @override
+  State<ProfileTab> createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
   List<Language> languages = [
     Language(code: 'en', name: 'English'),
     Language(code: 'ar', name: 'العربية'),
   ];
+
   @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
@@ -98,8 +106,12 @@ class ProfileTab extends StatelessWidget {
                         );
                       },
                     ).toList(),
-                    onChanged: (value) {
+                    onChanged: (value) async {
                       settingsProvider.changeLanguage(value!);
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString('lang', value);
+                      setState(() {});
                     },
                   ),
                 )
