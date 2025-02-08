@@ -198,7 +198,8 @@ class _UpdateEventState extends State<UpdateEvent>
                                 child: Text(
                                   selectedDateTime != null
                                       ? dateFormat.format(selectedDateTime!)
-                                      : 'Choose Date',
+                                      : DateFormat('dd/MM/yyyy')
+                                          .format(event.dateTime),
                                   style: myblueTextTheme,
                                 ),
                               ),
@@ -244,7 +245,8 @@ class _UpdateEventState extends State<UpdateEvent>
                                 child: Text(
                                   timeOfDay != null
                                       ? format(context, timeOfDay!)
-                                      : 'Choose Time',
+                                      : DateFormat('hh:mm a')
+                                          .format(event.dateTime),
                                   style: myblueTextTheme,
                                 ),
                               ),
