@@ -3,6 +3,7 @@ import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/login.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
+import 'package:evently/widgets/loading_indicator.dart';
 import 'package:evently/widgets/login_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -27,6 +28,7 @@ class _RegisterState extends State<Register> {
   TextEditingController repasswordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isRegister = false;
   @override
   void dispose() {
     super.dispose();
@@ -62,6 +64,7 @@ class _RegisterState extends State<Register> {
                   height: 24.h,
                 ),
                 DeafultTextFormField(
+                  textCapitalization: TextCapitalization.words,
                   borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: nameController,
                   hintText: 'Name',
@@ -160,35 +163,43 @@ class _RegisterState extends State<Register> {
                 SizedBox(
                   height: 16.h,
                 ),
-                DefaultButton(
-                  label: AppLocalizations.of(context)!.register,
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      FirebaseService.register(
-                        name: nameController.text,
-                        email: emailController.text,
-                        password: passwordController.text,
-                      ).then((user) {
-                        Navigator.pushReplacementNamed(
-                          context,
-                          Login.routeName,
-                        );
-                      }).catchError((error) {
-                        if (error is FirebaseAuthException) {
-                          Fluttertoast.showToast(
-                            msg: error.message!,
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Apptheme.primary,
-                            textColor: Colors.red,
-                            fontSize: 16.0,
-                          );
-                        }
-                      });
-                    }
-                  },
-                ),
+                isRegister
+                    ? LoadingIndicator()
+                    : DefaultButton(
+                        label: AppLocalizations.of(context)!.register,
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            setState(() {
+                              isRegister = true;
+                            });
+                            FirebaseService.register(
+                              name: nameController.text,
+                              email: emailController.text,
+                              password: passwordController.text,
+                            ).then((user) {
+                              Navigator.pushReplacementNamed(
+                                context,
+                                Login.routeName,
+                              );
+                            }).catchError((error) {
+                              if (error is FirebaseAuthException) {
+                                Fluttertoast.showToast(
+                                  msg: error.message!,
+                                  toastLength: Toast.LENGTH_LONG,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Apptheme.primary,
+                                  textColor: Colors.red,
+                                  fontSize: 16.0,
+                                );
+                                setState(() {
+                                  isRegister = false;
+                                });
+                              }
+                            });
+                          }
+                        },
+                      ),
                 SizedBox(
                   height: 16.h,
                 ),

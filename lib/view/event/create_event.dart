@@ -295,43 +295,6 @@ class _CreateEventState extends State<CreateEvent> {
           );
         }
       });
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Apptheme.primary,
-            title: Text(
-              'Incomplete Fields',
-              style: Theme.of(context)
-                  .textTheme
-                  .displayMedium!
-                  .copyWith(color: Apptheme.backgroundLight),
-            ),
-            content: Text(
-              'Please fill out all required fields.',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(color: Apptheme.backgroundLight),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'OK',
-                  style: Theme.of(context)
-                      .textTheme
-                      .displayMedium!
-                      .copyWith(color: Apptheme.backgroundLight),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    } else {}
   }
 }

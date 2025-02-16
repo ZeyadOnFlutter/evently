@@ -4,7 +4,9 @@ import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/register.dart';
 import 'package:evently/view/home/home_screen.dart';
+import 'package:evently/widgets/custom_outlinedbutton.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
+import 'package:evently/widgets/loading_indicator.dart';
 import 'package:evently/widgets/login_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -27,6 +29,9 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isGoogleLogin = false;
+  bool isLogin = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -119,38 +124,48 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 24.h,
                   ),
-                  DefaultButton(
-                    label: AppLocalizations.of(context)!.login,
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        FirebaseService.login(
-                          email: emailController.text,
-                          password: passwordController.text,
-                        ).then(
-                          (user) {
-                            Provider.of<UserProvider>(context, listen: false)
-                                .updateUser(user);
-                            Navigator.of(context)
-                                .pushReplacementNamed(HomeScreen.routeName);
-                          },
-                        ).catchError(
-                          (error) {
-                            if (error is FirebaseAuthException) {
-                              Fluttertoast.showToast(
-                                msg: error.message!,
-                                toastLength: Toast.LENGTH_LONG,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
+                  isLogin
+                      ? LoadingIndicator()
+                      : DefaultButton(
+                          label: AppLocalizations.of(context)!.login,
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              setState(() {
+                                isLogin = true;
+                              });
+                              FirebaseService.login(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              ).then(
+                                (user) {
+                                  Provider.of<UserProvider>(context,
+                                          listen: false)
+                                      .updateUser(user);
+
+                                  Navigator.of(context).pushReplacementNamed(
+                                      HomeScreen.routeName);
+                                },
+                              ).catchError(
+                                (error) {
+                                  if (error is FirebaseAuthException) {
+                                    Fluttertoast.showToast(
+                                      msg: error.message!,
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0,
+                                    );
+                                    setState(() {
+                                      isLogin = false;
+                                    });
+                                  }
+                                },
                               );
                             }
                           },
-                        );
-                      }
-                    },
-                  ),
+                        ),
                   SizedBox(
                     height: 24.h,
                   ),
@@ -165,7 +180,9 @@ class _LoginState extends State<Login> {
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               Navigator.pushReplacementNamed(
-                                  context, Register.routeName);
+                                context,
+                                Register.routeName,
+                              );
                             },
                           text: 'Create Account',
                           style:
@@ -180,6 +197,53 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 24.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: Apptheme.primary,
+                          indent: 26.w,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Text(
+                          'Or',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: Apptheme.primary),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: Apptheme.primary,
+                          endIndent: 26.w,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 24.h,
+                  ),
+                  isGoogleLogin
+                      ? LoadingIndicator()
+                      : SizedBox(
+                          width: double.infinity,
+                          height: 57.67.h,
+                          child: CustomOutlinedbutton(
+                            onPressed: () async {
+                              setState(() {
+                                isGoogleLogin = true;
+                              });
+                              await FirebaseService.loginWithGoogle(context);
+                            },
+                          ),
+                        ),
                 ],
               ),
             ),

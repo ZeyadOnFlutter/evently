@@ -1,8 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/models/user.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/view/auth/register.dart';
+import 'package:evently/view/home/home_screen.dart';
+import 'package:evently/widgets/custom_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class FirebaseService {
   static CollectionReference<Event> getEventsCollection() {
@@ -90,6 +96,62 @@ class FirebaseService {
 
   static Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  static Future<void> addUserToFireStore(UserModel user) async {
+    CollectionReference<UserModel> userCollection = getUserCollection();
+    userCollection.doc(user.id).set(user);
+  }
+
+  static Future<UserModel> getUserFromFiresStore(UserModel user) async {
+    CollectionReference<UserModel> userCollection = getUserCollection();
+    DocumentSnapshot<UserModel> documentSnapshot =
+        await userCollection.doc(user.id).get();
+    return documentSnapshot.data()!;
+  }
+
+  static Future<UserModel?> loginWithGoogle(BuildContext context) async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        CustomDialog.showAlert(
+          context: context,
+          title: 'User is Not Signed',
+          content: 'Continue Google Sign In',
+          onConfirm: () {
+            Navigator.of(context).pop();
+          },
+        );
+        return null;
+      }
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      CollectionReference<UserModel> collectionReference = getUserCollection();
+      UserModel user = UserModel(
+        id: userCredential.user!.uid,
+        name: userCredential.user!.displayName ?? '',
+        email: userCredential.user!.email ?? '',
+        favouriteIds: [],
+      );
+
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        addUserToFireStore(user);
+      }
+      UserModel userModel = await getUserFromFiresStore(user);
+      Provider.of<UserProvider>(context, listen: false).updateUser(userModel);
+      Navigator.pushReplacementNamed(
+        context,
+        HomeScreen.routeName,
+      );
+
+      return userModel;
+    } catch (error) {}
   }
 
   static Future<void> addEventToFavourite(String eventId) async {

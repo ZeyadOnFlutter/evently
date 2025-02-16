@@ -6,12 +6,12 @@ import 'package:evently/view/auth/login.dart';
 import 'package:evently/view/auth/register.dart';
 import 'package:evently/view/event/create_event.dart';
 import 'package:evently/view/home/home_screen.dart';
+import 'package:evently/view/intro/intro_screen.dart';
 import 'package:evently/view/onboard/slider_screen.dart';
 import 'package:evently/view/update/update_event.dart';
 import 'package:evently/widgets/event_details.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +25,7 @@ void main() async {
   String seenSlider =
       hasSeenSlider ? Register.routeName : SliderScreen.routeName;
   String lang = prefs.getString('lang') ?? 'en';
+
   runApp(
     MultiProvider(
       providers: [
@@ -75,8 +76,9 @@ class Evently extends StatelessWidget {
             SliderScreen.routeName: (_) => const SliderScreen(),
             EventDetails.routeName: (_) => EventDetails(),
             UpdateEvent.routeName: (_) => const UpdateEvent(),
+            IntroScreen.routeName: (_) => const IntroScreen(),
           },
-          initialRoute: seenSlider,
+          initialRoute: IntroScreen.routeName,
         );
       },
     );

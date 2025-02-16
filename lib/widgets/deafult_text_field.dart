@@ -18,6 +18,7 @@ class DeafultTextFormField extends StatefulWidget {
     required this.borderColor,
     this.maxLines = 1,
     this.isSearch = false,
+    this.textCapitalization = TextCapitalization.none,
     super.key,
   });
   final TextEditingController? textEditingController;
@@ -31,6 +32,7 @@ class DeafultTextFormField extends StatefulWidget {
   final Color borderColor;
   final int? maxLines;
   final bool isSearch;
+  final TextCapitalization textCapitalization;
 
   @override
   State<DeafultTextFormField> createState() => _DeafultTextFormFieldState();
@@ -44,6 +46,7 @@ class _DeafultTextFormFieldState extends State<DeafultTextFormField> {
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
+      textCapitalization: widget.textCapitalization,
       textInputAction: TextInputAction.done,
       controller: widget.textEditingController,
       onChanged: widget.onChanged,

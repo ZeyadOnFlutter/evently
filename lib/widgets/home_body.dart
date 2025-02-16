@@ -3,6 +3,7 @@ import 'package:evently/providers/event_provider.dart';
 import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/category_item.dart';
+import 'package:evently/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +22,7 @@ class _HomeBodyState extends State<HomeBody> {
     return prov.filteredEvents.isEmpty
         ? Padding(
             padding: EdgeInsets.only(top: 50.h),
-            child: const CircularProgressIndicator(
-              color: Apptheme.primary,
-            ),
+            child: const LoadingIndicator(),
           )
         : Expanded(
             child: ListView.separated(
