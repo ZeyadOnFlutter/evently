@@ -1,6 +1,7 @@
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class DeafultTextFormField extends StatefulWidget {
     this.maxLines = 1,
     this.isSearch = false,
     this.textCapitalization = TextCapitalization.none,
+    this.textInputFormatter,
     super.key,
   });
   final TextEditingController? textEditingController;
@@ -33,6 +35,7 @@ class DeafultTextFormField extends StatefulWidget {
   final int? maxLines;
   final bool isSearch;
   final TextCapitalization textCapitalization;
+  final TextInputFormatter? textInputFormatter;
 
   @override
   State<DeafultTextFormField> createState() => _DeafultTextFormFieldState();
@@ -46,6 +49,12 @@ class _DeafultTextFormFieldState extends State<DeafultTextFormField> {
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
+      inputFormatters: widget.textInputFormatter == null
+          ?[
+       
+      ]: [
+              widget.textInputFormatter!,
+            ],
       textCapitalization: widget.textCapitalization,
       textInputAction: TextInputAction.done,
       controller: widget.textEditingController,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class MyCategory {
@@ -14,61 +15,61 @@ class MyCategory {
   static List<MyCategory> myCategory = [
     MyCategory(
       id: '0',
-      categoryName: 'All',
+      categoryName: "all".tr(),
       iconName: Icons.explore_outlined,
       imageName: '',
     ),
     MyCategory(
       id: '1',
-      categoryName: 'Sport',
+      categoryName: "sport",
       iconName: Icons.pedal_bike_outlined,
       imageName: 'sport',
     ),
     MyCategory(
       id: '2',
-      categoryName: 'Birthday',
+      categoryName: "birthday",
       iconName: Icons.cake_outlined,
       imageName: 'birthday',
     ),
     MyCategory(
       id: '3',
-      categoryName: 'Meeting',
+      categoryName: "meeting",
       iconName: Icons.business_center_outlined,
       imageName: 'meeting',
     ),
     MyCategory(
       id: '4',
-      categoryName: 'Gaming',
+      categoryName: "gaming",
       iconName: Icons.games_outlined,
       imageName: 'gaming',
     ),
     MyCategory(
       id: '5',
-      categoryName: 'Eating',
+      categoryName: "eating",
       iconName: Icons.fastfood_outlined,
       imageName: 'eating',
     ),
     MyCategory(
       id: '6',
-      categoryName: 'Holiday',
+      categoryName: "holiday",
       iconName: Icons.beach_access_outlined,
       imageName: 'holiday',
     ),
     MyCategory(
       id: '7',
-      categoryName: 'Exhibition',
+      categoryName: "exhibition",
       iconName: Icons.art_track_outlined,
       imageName: 'exhibition',
     ),
     MyCategory(
       id: '8',
-      categoryName: 'Workshop',
+      categoryName: "work_shop",
       iconName: Icons.build_outlined,
       imageName: 'workshop',
     ),
     MyCategory(
       id: '9',
-      categoryName: 'Book Club',
+      categoryName: "book_club",
       iconName: Icons.menu_book_outlined,
       imageName: 'bookclub',
     ),

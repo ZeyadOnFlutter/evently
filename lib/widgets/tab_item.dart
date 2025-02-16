@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/category.dart';
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
@@ -62,7 +63,7 @@ class TabItem extends StatelessWidget {
             width: 8.w,
           ),
           Text(
-            myCategory.categoryName,
+            myCategory.categoryName.tr(),
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: isCreateEvent
                       ? isSelected

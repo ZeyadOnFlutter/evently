@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/providers/event_provider.dart';
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
@@ -14,17 +15,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool hasSeenSlider = prefs.getBool('endSlider') ?? false;
-  String seenSlider =
-      hasSeenSlider ? Register.routeName : SliderScreen.routeName;
-  String lang = prefs.getString('lang') ?? 'en';
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // bool hasSeenSlider = prefs.getBool('endSlider') ?? false;
+  // String seenSlider =
+  //     hasSeenSlider ? Register.routeName : SliderScreen.routeName;
+  // String lang = prefs.getString('lang') ?? 'en';
 
   runApp(
     MultiProvider(
@@ -41,9 +41,19 @@ void main() async {
           create: (context) => UserProvider(),
         ),
       ],
-      child: Evently(
-        seenSlider: seenSlider,
-        lang: lang,
+      child: EasyLocalization(
+        supportedLocales: [
+          Locale('en'),
+          Locale('ar'),
+        ],
+        saveLocale: true,
+        fallbackLocale: Locale('en'),
+        startLocale: Locale('en'),
+        path: 'assets/translations',
+        child: const Evently(
+          seenSlider: 'seenSlider',
+          lang: 'lang',
+        ),
       ),
     ),
   );
@@ -65,9 +75,9 @@ class Evently extends StatelessWidget {
           theme: Apptheme.lightTheme,
           darkTheme: Apptheme.darkTheme,
           themeMode: Provider.of<SettingsProvider>(context).themeMode,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale(Provider.of<SettingsProvider>(context).languageCode),
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
           routes: {
             Login.routeName: (_) => const Login(),
             Register.routeName: (_) => const Register(),

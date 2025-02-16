@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
@@ -15,7 +16,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -60,7 +60,7 @@ class _LoginState extends State<Login> {
                   DeafultTextFormField(
                     borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                     textEditingController: emailController,
-                    hintText: 'Email',
+                    hintText: "email".tr(),
                     prefixImageName: 'email',
                     textStyle: GoogleFonts.inter(
                       fontSize: 16.sp,
@@ -87,7 +87,7 @@ class _LoginState extends State<Login> {
                     borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                     textEditingController: passwordController,
                     isPassword: true,
-                    hintText: 'Password',
+                    hintText: "password".tr(),
                     textStyle: GoogleFonts.inter(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
@@ -110,7 +110,7 @@ class _LoginState extends State<Login> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      'ForgotPassword?',
+                      "forget_password".tr(),
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.w700,
                         color: Apptheme.primary,
@@ -127,7 +127,7 @@ class _LoginState extends State<Login> {
                   isLogin
                       ? LoadingIndicator()
                       : DefaultButton(
-                          label: AppLocalizations.of(context)!.login,
+                          label: "login".tr(),
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
                               setState(() {
@@ -173,7 +173,7 @@ class _LoginState extends State<Login> {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Don’t Have Account ? ',
+                          text: "do_not_have_account".tr(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         TextSpan(
@@ -184,7 +184,7 @@ class _LoginState extends State<Login> {
                                 Register.routeName,
                               );
                             },
-                          text: 'Create Account',
+                          text: "create_account".tr(),
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w700,
@@ -212,7 +212,7 @@ class _LoginState extends State<Login> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         child: Text(
-                          'Or',
+                          "or".tr(),
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge!

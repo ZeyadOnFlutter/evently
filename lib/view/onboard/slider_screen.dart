@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
 import 'package:evently/view/auth/login.dart';
@@ -22,6 +23,7 @@ class _SliderScreenState extends State<SliderScreen> {
   int currentIndex = 0;
   PageController pageController = PageController();
   bool isLastPage = false;
+  bool get isEnglish => context.locale.toString() == 'en';
   @override
   void dispose() {
     super.dispose();
@@ -69,7 +71,7 @@ class _SliderScreenState extends State<SliderScreen> {
                           height: 39.h,
                         ),
                         Text(
-                          MySlider.sliderHeader[index],
+                          MySlider.sliderHeader[index].tr(),
                           style:
                               Theme.of(context).textTheme.titleLarge!.copyWith(
                                     fontWeight: FontWeight.w700,
@@ -80,13 +82,11 @@ class _SliderScreenState extends State<SliderScreen> {
                           height: 39.h,
                         ),
                         Text(
-                          MySlider.sliderDescription[index],
+                          MySlider.sliderDescription[index].tr(),
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     height: 1.2,
                                   ),
-                          textDirection: TextDirection.ltr,
-                          textAlign: TextAlign.left,
                         ),
                       ],
                     );
@@ -113,12 +113,27 @@ class _SliderScreenState extends State<SliderScreen> {
                               );
                             },
                             child: isDark
-                                ? SvgPicture.asset(
-                                    'assets/icons/arrowleft.svg',
-                                  )
-                                : SvgPicture.asset(
-                                    'assets/icons/rightarrow.svg',
-                                  ),
+                                ? isEnglish
+                                    ? SvgPicture.asset(
+                                        'assets/icons/arrowleft.svg',
+                                      )
+                                    : SvgPicture.asset(
+                                        'assets/icons/arrowright.svg',
+                                      )
+                                : isEnglish
+                                    ? SvgPicture.asset(
+                                        'assets/icons/rightarrow.svg',
+                                      )
+                                    : SvgPicture.asset(
+                                        'assets/icons/leftarrow.svg',
+                                      ),
+                            //isDark
+                            //      SvgPicture.asset(
+                            //         'assets/icons/arrowleft.svg',
+                            //       )
+                            //     : SvgPicture.asset(
+                            //         'assets/icons/rightarrow.svg',
+                            //       ),
                           ),
                     SmoothPageIndicator(
                       controller: pageController,
@@ -156,12 +171,20 @@ class _SliderScreenState extends State<SliderScreen> {
                         }
                       },
                       child: isDark
-                          ? SvgPicture.asset(
-                              'assets/icons/arrowright.svg',
-                            )
-                          : SvgPicture.asset(
-                              'assets/icons/leftarrow.svg',
-                            ),
+                          ? isEnglish
+                              ? SvgPicture.asset(
+                                  'assets/icons/arrowright.svg',
+                                )
+                              : SvgPicture.asset(
+                                  'assets/icons/arrowleft.svg',
+                                )
+                          : isEnglish
+                              ? SvgPicture.asset(
+                                  'assets/icons/leftarrow.svg',
+                                )
+                              : SvgPicture.asset(
+                                  'assets/icons/rightarrow.svg',
+                                ),
                     ),
                   ],
                 ),

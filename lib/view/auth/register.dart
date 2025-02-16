@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
@@ -8,11 +9,11 @@ import 'package:evently/widgets/login_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -67,7 +68,7 @@ class _RegisterState extends State<Register> {
                   textCapitalization: TextCapitalization.words,
                   borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: nameController,
-                  hintText: 'Name',
+                  hintText: "name".tr(),
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
@@ -90,7 +91,12 @@ class _RegisterState extends State<Register> {
                 DeafultTextFormField(
                   borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: emailController,
-                  hintText: 'Email',
+                  hintText: "email".tr(),
+                  textInputFormatter: FilteringTextInputFormatter.allow(
+                    RegExp(
+                      r'^[a-zA-Z0-9@._-]*$',
+                    ),
+                  ),
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
@@ -117,7 +123,7 @@ class _RegisterState extends State<Register> {
                   borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: passwordController,
                   isPassword: true,
-                  hintText: 'Password',
+                  hintText: "password".tr(),
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
@@ -141,7 +147,7 @@ class _RegisterState extends State<Register> {
                   borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: repasswordController,
                   isPassword: true,
-                  hintText: 'Re Password',
+                  hintText: "re_password".tr(),
                   textInputType: TextInputType.text,
                   prefixImageName: 'lock',
                   textStyle: GoogleFonts.inter(
@@ -166,7 +172,7 @@ class _RegisterState extends State<Register> {
                 isRegister
                     ? LoadingIndicator()
                     : DefaultButton(
-                        label: AppLocalizations.of(context)!.register,
+                        label: "register".tr(),
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             setState(() {
@@ -207,7 +213,7 @@ class _RegisterState extends State<Register> {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Already Have Account ? ',
+                        text: "already_have_account".tr(),
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       TextSpan(
@@ -218,7 +224,7 @@ class _RegisterState extends State<Register> {
                               Login.routeName,
                             );
                           },
-                        text: 'Login',
+                        text: "login".tr(),
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               fontWeight: FontWeight.w700,
                               color: Apptheme.primary,

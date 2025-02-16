@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/category.dart';
 import 'package:evently/providers/event_provider.dart';
 import 'package:evently/providers/settings_provider.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class HomeHeader extends StatefulWidget {
-  HomeHeader({super.key});
+  const HomeHeader({super.key});
 
   @override
   State<HomeHeader> createState() => _HomeHeaderState();
@@ -48,7 +49,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Welcome Back ✨',
+                        "welcome_back".tr(),
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium!
@@ -85,15 +86,26 @@ class _HomeHeaderState extends State<HomeHeader> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Center(
-                      child: Text(
-                        'EN',
-                        style:
-                            Theme.of(context).textTheme.displayMedium!.copyWith(
-                                  fontSize: 14,
-                                  color: isDark
-                                      ? Apptheme.backgroundDark
-                                      : Apptheme.primary,
-                                ),
+                      child: InkWell(
+                        onTap: () {
+                          context.setLocale(
+                            context.locale.toString() == 'en'
+                                ? Locale('ar')
+                                : Locale('en'),
+                          );
+                        },
+                        child: Text(
+                          context.locale.toString() == 'en' ? 'EN' : 'عربى',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium!
+                              .copyWith(
+                                fontSize: 14,
+                                color: isDark
+                                    ? Apptheme.backgroundDark
+                                    : Apptheme.primary,
+                              ),
+                        ),
                       ),
                     ),
                   )
@@ -104,20 +116,28 @@ class _HomeHeaderState extends State<HomeHeader> {
               height: 8.h,
             ),
             Padding(
-              padding: EdgeInsets.only(
-                left: 16.w,
+              padding: EdgeInsetsDirectional.only(
+                start: 16.w,
               ),
               child: Row(
                 children: [
-                  const IconItem(iconName: 'map_icon'),
-                  SizedBox(
-                    width: 4.w,
+                  const IconItem(
+                    iconName: 'map_icon',
+                  ),
+                  const SizedBox(
+                    width: 8,
                   ),
                   Text(
-                    'Cairo , Egypt',
+                    '${"cairo".tr()} , ',
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: Apptheme.backgroundLight),
+                  ),
+                  Text(
+                    "egypt".tr(),
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                          fontWeight: FontWeight.w500,
                           color: Apptheme.backgroundLight,
-                          fontWeight: FontWeight.w600,
                         ),
                   ),
                 ],

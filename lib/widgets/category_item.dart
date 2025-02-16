@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
 import 'package:evently/providers/settings_provider.dart';
@@ -6,7 +7,6 @@ import 'package:evently/theme/apptheme.dart';
 import 'package:evently/widgets/event_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CategoryItem extends StatelessWidget {
@@ -51,9 +51,9 @@ class CategoryItem extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
+          PositionedDirectional(
             top: 8.h,
-            left: 8.w,
+            start: context.locale.toString() == 'en' ? 8.w : 8.w,
             child: Container(
               padding: EdgeInsets.all(8.r),
               decoration: BoxDecoration(

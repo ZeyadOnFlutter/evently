@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
@@ -38,7 +39,7 @@ class _ProfileTabState extends State<ProfileTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Dark Mode',
+                  "darkmode".tr(),
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.w700,
                         color: settingsProvider.isDark
@@ -75,7 +76,7 @@ class _ProfileTabState extends State<ProfileTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Language',
+                  "language".tr(),
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.w700,
                         color: settingsProvider.isDark
@@ -89,7 +90,7 @@ class _ProfileTabState extends State<ProfileTab> {
                         ? Apptheme.backgroundDark
                         : Apptheme.backgroundLight,
                     menuWidth: 100.w,
-                    value: settingsProvider.languageCode,
+                    value: context.locale.toString(),
                     borderRadius: BorderRadius.circular(16),
                     items: languages.map(
                       (languages) {
@@ -107,10 +108,8 @@ class _ProfileTabState extends State<ProfileTab> {
                       },
                     ).toList(),
                     onChanged: (value) async {
-                      settingsProvider.changeLanguage(value!);
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('lang', value);
+                      context.setLocale(Locale(value!));
+
                       setState(() {});
                     },
                   ),
@@ -146,13 +145,19 @@ class _ProfileTabState extends State<ProfileTab> {
               label: Row(
                 spacing: 8.w,
                 children: [
-                  Icon(
-                    Icons.logout,
-                    size: 24.r,
-                    color: Apptheme.backgroundLight,
-                  ),
+                  context.locale.toString() == 'en'
+                      ? Icon(
+                          Icons.logout,
+                          size: 24.r,
+                          color: Apptheme.backgroundLight,
+                        )
+                      : Icon(
+                          Icons.subdirectory_arrow_left_rounded,
+                          size: 24.r,
+                          color: Apptheme.backgroundLight,
+                        ),
                   Text(
-                    'Logout',
+                    "logout".tr(),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Apptheme.backgroundLight,
                           fontSize: 20,
