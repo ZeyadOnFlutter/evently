@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/models/user.dart';
 import 'package:evently/providers/user_provider.dart';
-import 'package:evently/view/auth/register.dart';
 import 'package:evently/view/home/home_screen.dart';
 import 'package:evently/widgets/custom_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,6 +37,7 @@ class FirebaseService {
   static Future<List<Event>> getEventsFromFireStore(
       /*String categoryId*/) async {
     CollectionReference<Event> collectionReference = getEventsCollection();
+    collectionReference.snapshots();
     QuerySnapshot<Event> querySnapshot =
         await collectionReference.orderBy('dateTime').get();
 
@@ -58,40 +58,72 @@ class FirebaseService {
     await collectionReference.doc(event.id).update(event.toJson());
   }
 
-  static Future<UserModel> register({
+  static Future<UserModel?> register({
     required String name,
     required String email,
     required String password,
+    required Function onLoading,
+    required Function onSuccess,
+    required Function onError,
   }) async {
-    UserCredential userCredential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    UserModel user = UserModel(
-      id: userCredential.user!.uid,
-      name: name,
-      email: email,
-      favouriteIds: [],
-    );
-    CollectionReference<UserModel> userCollection = getUserCollection();
-    userCollection.doc(user.id).set(user);
-    return user;
+    try {
+      onLoading();
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      userCredential.user!.sendEmailVerification();
+      UserModel user = UserModel(
+        id: userCredential.user!.uid,
+        name: name,
+        email: email,
+        favouriteIds: [],
+      );
+      CollectionReference<UserModel> userCollection = getUserCollection();
+      userCollection.doc(user.id).set(user);
+
+      onSuccess();
+      return user;
+    } on FirebaseAuthException catch (e) {
+      onError(e.message);
+    } catch (e) {
+      onError(e.toString());
+      print('Error');
+    }
   }
 
-  static Future<UserModel> login({
+  static Future<UserModel?> login({
     required String email,
     required String password,
+    required Function onLoading,
+    required Function onSuccess,
+    required Function onError,
   }) async {
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    CollectionReference<UserModel> userCollection = getUserCollection();
-    DocumentSnapshot<UserModel> docSnapshot =
-        await userCollection.doc(userCredential.user!.uid).get();
-    return docSnapshot.data()!;
+    try {
+      onLoading();
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      CollectionReference<UserModel> userCollection = getUserCollection();
+      DocumentSnapshot<UserModel> docSnapshot =
+          await userCollection.doc(userCredential.user!.uid).get();
+      if (userCredential.user!.emailVerified) {
+        onSuccess(
+          docSnapshot.data()!,
+        );
+      } else {
+        onError('Email Must Be Verified');
+      }
+
+      return docSnapshot.data()!;
+    } on FirebaseAuthException catch (e) {
+      onError(e.message);
+    } catch (e) {
+      onError(e.toString());
+    }
   }
 
   static Future<void> logout() async {
@@ -110,18 +142,12 @@ class FirebaseService {
     return documentSnapshot.data()!;
   }
 
-  static Future<UserModel?> loginWithGoogle(BuildContext context) async {
+  static Future<UserModel?> loginWithGoogle(
+      BuildContext context, Function onError, Function onSuccess) async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
-        CustomDialog.showAlert(
-          context: context,
-          title: 'User is Not Signed',
-          content: 'Continue Google Sign In',
-          onConfirm: () {
-            Navigator.of(context).pop();
-          },
-        );
+        onError('User Is Not Signed In', null);
         return null;
       }
       final GoogleSignInAuthentication? googleAuth =
@@ -144,14 +170,16 @@ class FirebaseService {
         addUserToFireStore(user);
       }
       UserModel userModel = await getUserFromFiresStore(user);
-      Provider.of<UserProvider>(context, listen: false).updateUser(userModel);
-      Navigator.pushReplacementNamed(
-        context,
-        HomeScreen.routeName,
-      );
+      onSuccess('User Signed In SuccesFully', userModel);
 
       return userModel;
-    } catch (error) {}
+    } on FirebaseAuthException catch (error) {
+      onError(error.message);
+      print('Error ${error.message}');
+    } catch (e) {
+      onError(e.toString());
+      print(e.toString());
+    }
   }
 
   static Future<void> addEventToFavourite(String eventId) async {

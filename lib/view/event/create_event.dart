@@ -1,3 +1,5 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/category.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
@@ -62,7 +64,7 @@ class _CreateEventState extends State<CreateEvent> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: const Text('Create Event'),
+          title: Text("create_event".tr()),
         ),
         body: SafeArea(
           child: Column(
@@ -106,12 +108,12 @@ class _CreateEventState extends State<CreateEvent> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Title',
+                            "title".tr(),
                             style: myblackTextTheme,
                           ),
                           DeafultTextFormField(
                             textEditingController: titleController,
-                            hintText: 'Event Title',
+                            hintText: "event_title".tr(),
                             borderColor:
                                 isDark ? Apptheme.primary : Apptheme.grey,
                             textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -124,12 +126,12 @@ class _CreateEventState extends State<CreateEvent> {
                             },
                           ),
                           Text(
-                            'Description',
+                            "description".tr(),
                             style: myblackTextTheme,
                           ),
                           DeafultTextFormField(
                             textEditingController: descriptionController,
-                            hintText: 'Event Descriprion',
+                            hintText: "event_description".tr(),
                             borderColor:
                                 isDark ? Apptheme.primary : Apptheme.grey,
                             textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -154,7 +156,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 ),
                               ),
                               Text(
-                                'Event Date',
+                                "event_date".tr(),
                                 style: myblackTextTheme,
                               ),
                               const Spacer(),
@@ -177,7 +179,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 child: Text(
                                   selectedDateTime != null
                                       ? dateFormat.format(selectedDateTime!)
-                                      : 'Choose Date',
+                                      : "choose_date".tr(),
                                   style: myblueTextTheme,
                                 ),
                               ),
@@ -196,7 +198,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 ),
                               ),
                               Text(
-                                'Event Time',
+                                "event_time".tr(),
                                 style: myblackTextTheme,
                               ),
                               const Spacer(),
@@ -223,7 +225,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 child: Text(
                                   timeOfDay != null
                                       ? format(context, timeOfDay!)
-                                      : 'Choose Time',
+                                      : "choose_time".tr(),
                                   style: myblueTextTheme,
                                 ),
                               ),
@@ -249,6 +251,7 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   void createEvent(BuildContext context) async {
+    bool isDark = Provider.of<SettingsProvider>(context, listen: false).isDark;
     if (formKey.currentState!.validate() &&
         selectedDateTime != null &&
         timeOfDay != null) {
@@ -271,16 +274,20 @@ class _CreateEventState extends State<CreateEvent> {
           EventProvider prov =
               Provider.of<EventProvider>(context, listen: false);
           prov.getEvents();
-          Fluttertoast.showToast(
-            msg: "Event Created Successfully",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Apptheme.red,
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
-          Navigator.of(context).pop();
+          AwesomeDialog(
+            btnCancelColor: Colors.green,
+            btnOkColor: Apptheme.primary,
+            dialogBackgroundColor:
+                isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.topSlide,
+            title: 'Success',
+            desc: 'Event Created Successfully',
+            btnOkOnPress: () {
+              Navigator.of(context).pop();
+            },
+          ).show();
         },
       ).catchError((error) {
         if (error is FirebaseException) {

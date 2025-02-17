@@ -6,6 +6,7 @@ import 'package:evently/widgets/category_item.dart';
 import 'package:evently/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class HomeBody extends StatefulWidget {
@@ -20,9 +21,12 @@ class _HomeBodyState extends State<HomeBody> {
   Widget build(BuildContext context) {
     EventProvider prov = Provider.of<EventProvider>(context);
     return prov.filteredEvents.isEmpty
-        ? Padding(
-            padding: EdgeInsets.only(top: 50.h),
-            child: const LoadingIndicator(),
+        ? Expanded(
+            child: Center(
+              child: LottieBuilder.asset(
+                'assets/lottie/event.json',
+              ),
+            ),
           )
         : Expanded(
             child: ListView.separated(

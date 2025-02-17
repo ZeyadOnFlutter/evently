@@ -1,3 +1,5 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/providers/settings_provider.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +33,7 @@ class _RegisterState extends State<Register> {
   TextEditingController nameController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isRegister = false;
+  int languageValue = 0;
   @override
   void dispose() {
     super.dispose();
@@ -182,12 +186,46 @@ class _RegisterState extends State<Register> {
                               name: nameController.text,
                               email: emailController.text,
                               password: passwordController.text,
-                            ).then((user) {
-                              Navigator.pushReplacementNamed(
-                                context,
-                                Login.routeName,
-                              );
-                            }).catchError((error) {
+                              onLoading: () {},
+                              onSuccess: () {
+                                AwesomeDialog(
+                                  btnCancelColor: Colors.green,
+                                  btnOkColor: Apptheme.primary,
+                                  dialogBackgroundColor: isDark
+                                      ? Apptheme.backgroundDark
+                                      : Apptheme.backgroundLight,
+                                  context: context,
+                                  dialogType: DialogType.success,
+                                  animType: AnimType.topSlide,
+                                  title: 'Success',
+                                  desc: 'User Created Successfully',
+                                  btnOkOnPress: () {
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      Login.routeName,
+                                    );
+                                  },
+                                ).show();
+                              },
+                              onError: (message) {
+                                AwesomeDialog(
+                                  btnCancelColor: const Color(0xfff44369),
+                                  btnOkColor: Apptheme.primary,
+                                  dialogBackgroundColor: isDark
+                                      ? Apptheme.backgroundDark
+                                      : Apptheme.backgroundLight,
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  animType: AnimType.topSlide,
+                                  title: 'Error',
+                                  desc: message,
+                                  btnOkOnPress: () {},
+                                ).show();
+                                setState(() {
+                                  isRegister = false;
+                                });
+                              },
+                            ).then((user) {}).catchError((error) {
                               if (error is FirebaseAuthException) {
                                 Fluttertoast.showToast(
                                   msg: error.message!,
@@ -236,6 +274,43 @@ class _RegisterState extends State<Register> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 24.h,
+                ),
+                AnimatedToggleSwitch<int>.rolling(
+                  current: context.locale.toString() == 'en' ? 0 : 1,
+                  borderWidth: 2,
+                  spacing: 10.w,
+                  values: const [0, 1],
+                  onChanged: (i) {
+                    setState(
+                      () => languageValue = i,
+                    );
+                    context.setLocale(
+                      languageValue == 0 ? Locale('en') : Locale('ar'),
+                    );
+                  },
+                  iconBuilder: (value, foreground) => value == 0
+                      ? SvgPicture.asset(
+                          'assets/icons/usa.svg',
+                          width: 35.w,
+                          height: 35.h,
+                          fit: BoxFit.cover,
+                        )
+                      : SvgPicture.asset(
+                          'assets/icons/egypt.svg',
+                          width: 35.w,
+                          height: 35.h,
+                          fit: BoxFit.cover,
+                        ),
+                  iconsTappable: true,
+                  style: ToggleStyle(
+                    borderColor: Apptheme.primary,
+                    indicatorColor: Apptheme.primary,
+                    backgroundColor: Colors.transparent,
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                )
               ],
             ),
           ),

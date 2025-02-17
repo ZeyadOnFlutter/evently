@@ -42,13 +42,13 @@ void main() async {
         ),
       ],
       child: EasyLocalization(
-        supportedLocales: [
+        supportedLocales: const [
           Locale('en'),
           Locale('ar'),
         ],
         saveLocale: true,
-        fallbackLocale: Locale('en'),
-        startLocale: Locale('en'),
+        fallbackLocale: const Locale('en'),
+        startLocale: const Locale('en'),
         path: 'assets/translations',
         child: const Evently(
           seenSlider: 'seenSlider',

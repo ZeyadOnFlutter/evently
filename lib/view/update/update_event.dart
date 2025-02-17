@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/category.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
@@ -86,7 +87,7 @@ class _UpdateEventState extends State<UpdateEvent>
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: const Text('Edit Event'),
+          title: Text("edit_event".tr()),
         ),
         body: SafeArea(
           child: Column(
@@ -129,7 +130,7 @@ class _UpdateEventState extends State<UpdateEvent>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Title',
+                            "title".tr(),
                             style: myblackTextTheme,
                           ),
                           DeafultTextFormField(
@@ -146,7 +147,7 @@ class _UpdateEventState extends State<UpdateEvent>
                             },
                           ),
                           Text(
-                            'Description',
+                            "description".tr(),
                             style: myblackTextTheme,
                           ),
                           DeafultTextFormField(
@@ -175,7 +176,7 @@ class _UpdateEventState extends State<UpdateEvent>
                                 ),
                               ),
                               Text(
-                                'Event Date',
+                                "event_date".tr(),
                                 style: myblackTextTheme,
                               ),
                               const Spacer(),
@@ -218,7 +219,7 @@ class _UpdateEventState extends State<UpdateEvent>
                                 ),
                               ),
                               Text(
-                                'Event Time',
+                                "event_time".tr(),
                                 style: myblackTextTheme,
                               ),
                               const Spacer(),
