@@ -1,9 +1,6 @@
-import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
-import 'package:evently/connection/firebase_service.dart';
-import 'package:evently/theme/apptheme.dart';
+import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/widgets/category_item.dart';
-import 'package:evently/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -20,11 +17,14 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
     EventProvider prov = Provider.of<EventProvider>(context);
+    bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return prov.filteredEvents.isEmpty
         ? Expanded(
             child: Center(
               child: LottieBuilder.asset(
-                'assets/lottie/event.json',
+                isDark
+                    ? 'assets/lottie/event_dark.json'
+                    : 'assets/lottie/event.json',
               ),
             ),
           )

@@ -147,11 +147,13 @@ class FirebaseService {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
-        onError('User Is Not Signed In', null);
+        onError(
+          'User Is Not Signed In',
+        );
         return null;
       }
       final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+          await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
@@ -176,9 +178,10 @@ class FirebaseService {
     } on FirebaseAuthException catch (error) {
       onError(error.message);
       print('Error ${error.message}');
+      return null;
     } catch (e) {
-      onError(e.toString());
       print(e.toString());
+      return null;
     }
   }
 
