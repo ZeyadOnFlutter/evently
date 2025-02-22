@@ -2,6 +2,7 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/connection/firebase_service.dart';
+import 'package:evently/models/user.dart';
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
@@ -141,9 +142,6 @@ class _LoginState extends State<Login> {
                                   email: emailController.text,
                                   password: passwordController.text,
                                   onError: (message) {
-                                    setState(() {
-                                      isLogin = false;
-                                    });
                                     AwesomeDialog(
                                       btnCancelColor: const Color(0xfff44369),
                                       btnOkColor: Apptheme.primary,
@@ -157,10 +155,16 @@ class _LoginState extends State<Login> {
                                       desc: message,
                                       btnOkOnPress: () {},
                                     ).show();
+                                    setState(() {
+                                      isLogin = false;
+                                      passwordController.clear();
+                                    });
                                   },
-                                  onLoading: () {},
                                   onSuccess: (user) {
                                     AwesomeDialog(
+                                      onDismissCallback: (type) {
+                                        onSignInSuccess(context, user);
+                                      },
                                       btnCancelColor: Colors.green,
                                       btnOkColor: Apptheme.primary,
                                       dialogBackgroundColor: isDark
@@ -172,13 +176,7 @@ class _LoginState extends State<Login> {
                                       title: 'Success',
                                       desc: 'User Created Successfully',
                                       btnOkOnPress: () {
-                                        Provider.of<UserProvider>(
-                                          context,
-                                          listen: false,
-                                        ).updateUser(user);
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                HomeScreen.routeName);
+                                        onSignInSuccess(context, user);
                                       },
                                     ).show();
                                   });
@@ -303,6 +301,9 @@ class _LoginState extends State<Login> {
                                 },
                                 (message, user) {
                                   AwesomeDialog(
+                                    onDismissCallback: (type) {
+                                      onSignInSuccess(context, user);
+                                    },
                                     btnCancelColor: Colors.green,
                                     btnOkColor: Apptheme.primary,
                                     dialogBackgroundColor: isDark
@@ -314,13 +315,7 @@ class _LoginState extends State<Login> {
                                     title: 'Success',
                                     desc: 'User Created Successfully',
                                     btnOkOnPress: () {
-                                      Provider.of<UserProvider>(context,
-                                              listen: false)
-                                          .updateUser(user);
-                                      Navigator.pushReplacementNamed(
-                                        context,
-                                        HomeScreen.routeName,
-                                      );
+                                      onSignInSuccess(context, user);
                                     },
                                   ).show();
                                 },
@@ -372,5 +367,13 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  void onSignInSuccess(BuildContext context, UserModel user) {
+    Provider.of<UserProvider>(
+      context,
+      listen: false,
+    ).updateUser(user);
+    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
   }
 }

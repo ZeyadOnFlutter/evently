@@ -186,9 +186,11 @@ class _RegisterState extends State<Register> {
                               name: nameController.text,
                               email: emailController.text,
                               password: passwordController.text,
-                              onLoading: () {},
                               onSuccess: () {
                                 AwesomeDialog(
+                                  onDismissCallback: (type) {
+                                    onRegiserSuccess(context);
+                                  },
                                   btnCancelColor: Colors.green,
                                   btnOkColor: Apptheme.primary,
                                   dialogBackgroundColor: isDark
@@ -200,10 +202,7 @@ class _RegisterState extends State<Register> {
                                   title: 'Success',
                                   desc: 'User Created Successfully',
                                   btnOkOnPress: () {
-                                    Navigator.pushReplacementNamed(
-                                      context,
-                                      Login.routeName,
-                                    );
+                                    onRegiserSuccess(context);
                                   },
                                 ).show();
                               },
@@ -225,22 +224,23 @@ class _RegisterState extends State<Register> {
                                   isRegister = false;
                                 });
                               },
-                            ).then((user) {}).catchError((error) {
-                              if (error is FirebaseAuthException) {
-                                Fluttertoast.showToast(
-                                  msg: error.message!,
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Apptheme.primary,
-                                  textColor: Colors.red,
-                                  fontSize: 16.0,
-                                );
-                                setState(() {
-                                  isRegister = false;
-                                });
-                              }
-                            });
+                            );
+                            // then((user) {}).catchError((error) {
+                            //   if (error is FirebaseAuthException) {
+                            //     Fluttertoast.showToast(
+                            //       msg: error.message!,
+                            //       toastLength: Toast.LENGTH_LONG,
+                            //       gravity: ToastGravity.BOTTOM,
+                            //       timeInSecForIosWeb: 1,
+                            //       backgroundColor: Apptheme.primary,
+                            //       textColor: Colors.red,
+                            //       fontSize: 16.0,
+                            //     );
+                            //     setState(() {
+                            //       isRegister = false;
+                            //     });
+                            //   }
+                            // });
                           }
                         },
                       ),
@@ -316,6 +316,13 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
+    );
+  }
+
+  void onRegiserSuccess(BuildContext context) {
+    Navigator.pushReplacementNamed(
+      context,
+      Login.routeName,
     );
   }
 }

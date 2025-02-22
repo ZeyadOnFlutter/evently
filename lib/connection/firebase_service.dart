@@ -62,12 +62,10 @@ class FirebaseService {
     required String name,
     required String email,
     required String password,
-    required Function onLoading,
     required Function onSuccess,
     required Function onError,
   }) async {
     try {
-      onLoading();
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
@@ -96,12 +94,10 @@ class FirebaseService {
   static Future<UserModel?> login({
     required String email,
     required String password,
-    required Function onLoading,
     required Function onSuccess,
     required Function onError,
   }) async {
     try {
-      onLoading();
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
