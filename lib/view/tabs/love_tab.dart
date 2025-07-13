@@ -76,7 +76,7 @@ class _LoveTabState extends State<LoveTab> {
                     ? SizedBox(
                         height: 16.h,
                       )
-                    : SizedBox.shrink();
+                    : const SizedBox.shrink();
               },
               itemCount: eventProvider.filteredFavourites.length,
               padding: EdgeInsets.symmetric(
@@ -94,7 +94,7 @@ class _LoveTabState extends State<LoveTab> {
                           event: eventProvider.filteredFavourites[index],
                         ),
                       )
-                    : SizedBox.shrink();
+                    : const SizedBox.shrink();
               },
             ),
           )

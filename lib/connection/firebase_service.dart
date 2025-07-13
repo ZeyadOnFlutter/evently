@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/models/user.dart';
-import 'package:evently/providers/user_provider.dart';
-import 'package:evently/view/home/home_screen.dart';
-import 'package:evently/widgets/custom_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
 
 class FirebaseService {
   static CollectionReference<Event> getEventsCollection() {
@@ -62,10 +58,12 @@ class FirebaseService {
     required String name,
     required String email,
     required String password,
+    required Function onLoading,
     required Function onSuccess,
     required Function onError,
   }) async {
     try {
+      onLoading();
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
@@ -94,10 +92,12 @@ class FirebaseService {
   static Future<UserModel?> login({
     required String email,
     required String password,
+    required Function onLoading,
     required Function onSuccess,
     required Function onError,
   }) async {
     try {
+      onLoading();
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -139,13 +139,17 @@ class FirebaseService {
   }
 
   static Future<UserModel?> loginWithGoogle(
-      BuildContext context, Function onError, Function onSuccess) async {
+    BuildContext context,
+    Function onLoading,
+    Function onError,
+    Function onNullUser,
+    Function onSuccess,
+  ) async {
     try {
+      onLoading();
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
-        onError(
-          'User Is Not Signed In',
-        );
+        onNullUser("'User Is Not Signed In',");
         return null;
       }
       final GoogleSignInAuthentication? googleAuth =

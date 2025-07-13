@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -33,9 +35,11 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  bool isGoogleLogin = false;
-  bool isLogin = false;
+  bool isGoogleLogin = true;
+  bool isLogin = true;
   int languageValue = 0;
+  AwesomeDialog? awesomeLoginDialog;
+  AwesomeDialog? awesomeGoogleLoginDialog;
 
   @override
   void dispose() {
@@ -129,82 +133,101 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 24.h,
                   ),
-                  isLogin
-                      ? LoadingIndicator()
-                      : DefaultButton(
-                          label: "login".tr(),
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              setState(() {
-                                isLogin = true;
-                              });
-                              FirebaseService.login(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                  onError: (message) {
-                                    AwesomeDialog(
-                                      btnCancelColor: const Color(0xfff44369),
-                                      btnOkColor: Apptheme.primary,
-                                      dialogBackgroundColor: isDark
-                                          ? Apptheme.backgroundDark
-                                          : Apptheme.backgroundLight,
-                                      context: context,
-                                      dialogType: DialogType.error,
-                                      animType: AnimType.topSlide,
-                                      title: 'Error',
-                                      desc: message,
-                                      btnOkOnPress: () {},
-                                    ).show();
-                                    setState(() {
-                                      isLogin = false;
-                                      passwordController.clear();
-                                    });
-                                  },
-                                  onSuccess: (user) {
-                                    AwesomeDialog(
-                                      onDismissCallback: (type) {
-                                        onSignInSuccess(context, user);
-                                      },
-                                      btnCancelColor: Colors.green,
-                                      btnOkColor: Apptheme.primary,
-                                      dialogBackgroundColor: isDark
-                                          ? Apptheme.backgroundDark
-                                          : Apptheme.backgroundLight,
-                                      context: context,
-                                      dialogType: DialogType.success,
-                                      animType: AnimType.topSlide,
-                                      title: 'Success',
-                                      desc: 'User Created Successfully',
-                                      btnOkOnPress: () {
-                                        onSignInSuccess(context, user);
-                                      },
-                                    ).show();
-                                  });
-                              //     .then(
-                              //   (user) {
-
-                              //   },
-                              // ).catchError(
-                              //   (error) {
-                              //     if (error is FirebaseAuthException) {
-                              //       Fluttertoast.showToast(
-                              //         msg: error.message!,
-                              //         toastLength: Toast.LENGTH_LONG,
-                              //         gravity: ToastGravity.BOTTOM,
-                              //         timeInSecForIosWeb: 1,
-                              //         backgroundColor: Colors.red,
-                              //         textColor: Colors.white,
-                              //         fontSize: 16.0,
-                              //       );
-                              //       setState(() {
-                              //         isLogin = false;
-                              //       });
-                              //     }
-                              //   },
-                              // );
-                            }
+                  DefaultButton(
+                    label: "login".tr(),
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        FirebaseService.login(
+                          email: emailController.text,
+                          password: passwordController.text,
+                          onLoading: () {
+                            awesomeLoginDialog = AwesomeDialog(
+                              dismissOnTouchOutside: false,
+                              btnOkColor: Apptheme.primary,
+                              dialogBackgroundColor: isDark
+                                  ? Apptheme.backgroundDark
+                                  : Apptheme.backgroundLight,
+                              context: context,
+                              dialogType: DialogType.noHeader,
+                              animType: AnimType.topSlide,
+                              title: 'Loading....',
+                              desc: 'Loading....',
+                              btnOk: Padding(
+                                padding: EdgeInsets.all(16.h),
+                                child: const LoadingIndicator(),
+                              ),
+                            )..show();
                           },
-                        ),
+                          onError: (message) {
+                            awesomeLoginDialog!.dismiss();
+                            AwesomeDialog(
+                              btnCancelColor: const Color(0xfff44369),
+                              btnOkColor: Apptheme.primary,
+                              dialogBackgroundColor: isDark
+                                  ? Apptheme.backgroundDark
+                                  : Apptheme.backgroundLight,
+                              context: context,
+                              dialogType: DialogType.error,
+                              animType: AnimType.topSlide,
+                              title: 'Error',
+                              desc: message,
+                              btnOkOnPress: () {},
+                            ).show();
+                            setState(() {
+                              passwordController.clear();
+                            });
+                          },
+                          onSuccess: (user) {
+                            AwesomeDialog(
+                              onDismissCallback: (type) {
+                                onSignInSuccess(context, user);
+                              },
+                              btnCancelColor: Colors.green,
+                              btnOkColor: Apptheme.primary,
+                              dialogBackgroundColor: isDark
+                                  ? Apptheme.backgroundDark
+                                  : Apptheme.backgroundLight,
+                              context: context,
+                              dialogType: DialogType.success,
+                              animType: AnimType.topSlide,
+                              title: 'Success',
+                              desc: 'User Created Successfully',
+                              btnOkOnPress: () {
+                                onSignInSuccess(context, user);
+                              },
+                            ).show();
+                            setState(
+                              () {
+                                passwordController.clear();
+                              },
+                            );
+                          },
+                        );
+                        //     .then(
+                        //   (user) {
+
+                        //   },
+                        // ).catchError(
+                        //   (error) {
+                        //     if (error is FirebaseAuthException) {
+                        //       Fluttertoast.showToast(
+                        //         msg: error.message!,
+                        //         toastLength: Toast.LENGTH_LONG,
+                        //         gravity: ToastGravity.BOTTOM,
+                        //         timeInSecForIosWeb: 1,
+                        //         backgroundColor: Colors.red,
+                        //         textColor: Colors.white,
+                        //         fontSize: 16.0,
+                        //       );
+                        //       setState(() {
+                        //         isLogin = false;
+                        //       });
+                        //     }
+                        //   },
+                        // );
+                      }
+                    },
+                  ),
                   SizedBox(
                     height: 24.h,
                   ),
@@ -269,60 +292,87 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 24.h,
                   ),
-                  isGoogleLogin
-                      ? LoadingIndicator()
-                      : SizedBox(
-                          width: double.infinity,
-                          height: 57.67.h,
-                          child: CustomOutlinedbutton(
-                            onPressed: () async {
-                              setState(() {
-                                isGoogleLogin = true;
-                              });
-                              await FirebaseService.loginWithGoogle(
-                                context,
-                                (message) {
-                                  AwesomeDialog(
-                                    btnCancelColor: const Color(0xfff44369),
-                                    btnOkColor: Apptheme.primary,
-                                    dialogBackgroundColor: isDark
-                                        ? Apptheme.backgroundDark
-                                        : Apptheme.backgroundLight,
-                                    context: context,
-                                    dialogType: DialogType.error,
-                                    animType: AnimType.topSlide,
-                                    title: 'Error',
-                                    desc: message,
-                                    btnOkOnPress: () {},
-                                  ).show();
-                                  setState(() {
-                                    isGoogleLogin = false;
-                                  });
-                                },
-                                (message, user) {
-                                  AwesomeDialog(
-                                    onDismissCallback: (type) {
-                                      onSignInSuccess(context, user);
-                                    },
-                                    btnCancelColor: Colors.green,
-                                    btnOkColor: Apptheme.primary,
-                                    dialogBackgroundColor: isDark
-                                        ? Apptheme.backgroundDark
-                                        : Apptheme.backgroundLight,
-                                    context: context,
-                                    dialogType: DialogType.success,
-                                    animType: AnimType.topSlide,
-                                    title: 'Success',
-                                    desc: 'User Created Successfully',
-                                    btnOkOnPress: () {
-                                      onSignInSuccess(context, user);
-                                    },
-                                  ).show();
-                                },
-                              );
-                            },
-                          ),
-                        ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 57.67.h,
+                    child: CustomOutlinedbutton(
+                      onPressed: () async {
+                        await FirebaseService.loginWithGoogle(
+                          context,
+                          () {
+                            awesomeGoogleLoginDialog = AwesomeDialog(
+                              dismissOnTouchOutside: false,
+                              btnOkColor: Apptheme.primary,
+                              dialogBackgroundColor: isDark
+                                  ? Apptheme.backgroundDark
+                                  : Apptheme.backgroundLight,
+                              context: context,
+                              dialogType: DialogType.noHeader,
+                              animType: AnimType.topSlide,
+                              title: 'Loading....',
+                              desc: 'Loading....',
+                              btnOk: Padding(
+                                padding: EdgeInsets.all(16.h),
+                                child: const LoadingIndicator(),
+                              ),
+                            )..show();
+                          },
+                          (message) {
+                            awesomeGoogleLoginDialog!.dismiss();
+                            AwesomeDialog(
+                              btnCancelColor: const Color(0xfff44369),
+                              btnOkColor: Apptheme.primary,
+                              dialogBackgroundColor: isDark
+                                  ? Apptheme.backgroundDark
+                                  : Apptheme.backgroundLight,
+                              context: context,
+                              dialogType: DialogType.error,
+                              animType: AnimType.topSlide,
+                              title: 'Error',
+                              desc: message,
+                              btnOkOnPress: () {},
+                            ).show();
+                          },
+                          (message) {
+                            awesomeGoogleLoginDialog!.dismiss();
+                            AwesomeDialog(
+                              btnCancelColor: const Color(0xfff44369),
+                              btnOkColor: Apptheme.primary,
+                              dialogBackgroundColor: isDark
+                                  ? Apptheme.backgroundDark
+                                  : Apptheme.backgroundLight,
+                              context: context,
+                              dialogType: DialogType.error,
+                              animType: AnimType.topSlide,
+                              title: 'Error',
+                              desc: message,
+                              btnOkOnPress: () {},
+                            ).show();
+                          },
+                          (message, user) {
+                            AwesomeDialog(
+                              onDismissCallback: (type) {
+                                onSignInSuccess(context, user);
+                              },
+                              btnCancelColor: Colors.green,
+                              btnOkColor: Apptheme.primary,
+                              dialogBackgroundColor: isDark
+                                  ? Apptheme.backgroundDark
+                                  : Apptheme.backgroundLight,
+                              context: context,
+                              dialogType: DialogType.success,
+                              animType: AnimType.topSlide,
+                              title: 'Success',
+                              desc: 'User Created Successfully',
+                              btnOkOnPress: () {
+                                onSignInSuccess(context, user);
+                              },
+                            ).show();
+                          },
+                        );
+                      },
+                    ),
+                  ),
                   SizedBox(
                     height: 24.h,
                   ),

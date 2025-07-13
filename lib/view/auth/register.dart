@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/theme/apptheme.dart';
+import 'package:evently/utils/ut_utils.dart';
 import 'package:evently/view/auth/login.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
 import 'package:evently/widgets/loading_indicator.dart';
@@ -32,8 +33,9 @@ class _RegisterState extends State<Register> {
   TextEditingController repasswordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  bool isRegister = false;
+  bool isRegister = true;
   int languageValue = 0;
+  AwesomeDialog? awesomeRegisterDialog;
   @override
   void dispose() {
     super.dispose();
@@ -173,77 +175,89 @@ class _RegisterState extends State<Register> {
                 SizedBox(
                   height: 16.h,
                 ),
-                isRegister
-                    ? LoadingIndicator()
-                    : DefaultButton(
-                        label: "register".tr(),
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            setState(() {
-                              isRegister = true;
-                            });
-                            FirebaseService.register(
-                              name: nameController.text,
-                              email: emailController.text,
-                              password: passwordController.text,
-                              onSuccess: () {
-                                AwesomeDialog(
-                                  onDismissCallback: (type) {
-                                    onRegiserSuccess(context);
-                                  },
-                                  btnCancelColor: Colors.green,
-                                  btnOkColor: Apptheme.primary,
-                                  dialogBackgroundColor: isDark
-                                      ? Apptheme.backgroundDark
-                                      : Apptheme.backgroundLight,
-                                  context: context,
-                                  dialogType: DialogType.success,
-                                  animType: AnimType.topSlide,
-                                  title: 'Success',
-                                  desc: 'User Created Successfully',
-                                  btnOkOnPress: () {
-                                    onRegiserSuccess(context);
-                                  },
-                                ).show();
-                              },
-                              onError: (message) {
-                                AwesomeDialog(
-                                  btnCancelColor: const Color(0xfff44369),
-                                  btnOkColor: Apptheme.primary,
-                                  dialogBackgroundColor: isDark
-                                      ? Apptheme.backgroundDark
-                                      : Apptheme.backgroundLight,
-                                  context: context,
-                                  dialogType: DialogType.error,
-                                  animType: AnimType.topSlide,
-                                  title: 'Error',
-                                  desc: message,
-                                  btnOkOnPress: () {},
-                                ).show();
-                                setState(() {
-                                  isRegister = false;
-                                });
-                              },
-                            );
-                            // then((user) {}).catchError((error) {
-                            //   if (error is FirebaseAuthException) {
-                            //     Fluttertoast.showToast(
-                            //       msg: error.message!,
-                            //       toastLength: Toast.LENGTH_LONG,
-                            //       gravity: ToastGravity.BOTTOM,
-                            //       timeInSecForIosWeb: 1,
-                            //       backgroundColor: Apptheme.primary,
-                            //       textColor: Colors.red,
-                            //       fontSize: 16.0,
-                            //     );
-                            //     setState(() {
-                            //       isRegister = false;
-                            //     });
-                            //   }
-                            // });
-                          }
+                DefaultButton(
+                  label: "register".tr(),
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      FirebaseService.register(
+                        name: nameController.text,
+                        email: emailController.text,
+                        password: passwordController.text,
+                        onLoading: () {
+                          awesomeRegisterDialog = AwesomeDialog(
+                            dismissOnTouchOutside: false,
+                            btnOkColor: Apptheme.primary,
+                            dialogBackgroundColor: isDark
+                                ? Apptheme.backgroundDark
+                                : Apptheme.backgroundLight,
+                            context: context,
+                            dialogType: DialogType.noHeader,
+                            animType: AnimType.topSlide,
+                            title: 'Loading....',
+                            desc: 'Loading....',
+                            btnOk: Padding(
+                              padding: EdgeInsets.all(16.h),
+                              child: const LoadingIndicator(),
+                            ),
+                          )..show();
                         },
-                      ),
+                        onSuccess: () {
+                          AwesomeDialog(
+                            onDismissCallback: (type) {
+                              onRegiserSuccess(context);
+                            },
+                            dismissOnTouchOutside: false,
+                            btnCancelColor: Colors.green,
+                            btnOkColor: Apptheme.primary,
+                            dialogBackgroundColor: isDark
+                                ? Apptheme.backgroundDark
+                                : Apptheme.backgroundLight,
+                            context: context,
+                            dialogType: DialogType.success,
+                            animType: AnimType.topSlide,
+                            title: 'Success',
+                            desc: 'User Created Successfully',
+                            btnOkOnPress: () {
+                              onRegiserSuccess(context);
+                            },
+                          ).show();
+                        },
+                        onError: (message) {
+                          awesomeRegisterDialog!.dismiss();
+                          AwesomeDialog(
+                            btnCancelColor: const Color(0xfff44369),
+                            btnOkColor: Apptheme.primary,
+                            dialogBackgroundColor: isDark
+                                ? Apptheme.backgroundDark
+                                : Apptheme.backgroundLight,
+                            context: context,
+                            dialogType: DialogType.error,
+                            animType: AnimType.topSlide,
+                            title: 'Error',
+                            desc: message,
+                            btnOkOnPress: () {},
+                          ).show();
+                        },
+                      );
+                      // then((user) {}).catchError((error) {
+                      //   if (error is FirebaseAuthException) {
+                      //     Fluttertoast.showToast(
+                      //       msg: error.message!,
+                      //       toastLength: Toast.LENGTH_LONG,
+                      //       gravity: ToastGravity.BOTTOM,
+                      //       timeInSecForIosWeb: 1,
+                      //       backgroundColor: Apptheme.primary,
+                      //       textColor: Colors.red,
+                      //       fontSize: 16.0,
+                      //     );
+                      //     setState(() {
+                      //       isRegister = false;
+                      //     });
+                      //   }
+                      // });
+                    }
+                  },
+                ),
                 SizedBox(
                   height: 16.h,
                 ),
