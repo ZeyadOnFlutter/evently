@@ -18,9 +18,6 @@ Built with **Firebase**, **Provider**, and **multi-language support**.
 - Firebase (Auth, Firestore)
 - Provider (State Management)
 
-## 📸 Screenshots
-(Add screenshots here)
-
 ## ⚙️ Installation
 ```bash
 git clone https://github.com/codingking02/evently.git
