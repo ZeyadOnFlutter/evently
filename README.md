@@ -1,16 +1,29 @@
-# evently
+## 🎉 Evently – Event Management App
+```markdown
+# 🎉 Evently
 
-A new Flutter project.
+A Flutter-based **Event Management App** that helps users discover, browse, and manage events.  
+Built with **Firebase**, **Provider**, and **multi-language support**.
 
-## Getting Started
+## 🚀 Features
+- 🔐 Firebase Authentication (Google & Email sign-in)
+- 📅 Event discovery & browsing
+- 🌐 Maps integration
+- 👤 User profile management
+- 🌓 Light/Dark theme
+- 🌍 English & Arabic support
 
-This project is a starting point for a Flutter application.
+## 🛠️ Tech Stack
+- Flutter, Dart
+- Firebase (Auth, Firestore)
+- Provider (State Management)
 
-A few resources to get you started if this is your first Flutter project:
+## 📸 Screenshots
+(Add screenshots here)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## ⚙️ Installation
+```bash
+git clone https://github.com/codingking02/evently.git
+cd evently
+flutter pub get
+flutter run
