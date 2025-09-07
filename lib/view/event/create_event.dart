@@ -1,5 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/connection/location_service.dart';
 import 'package:evently/models/category.dart';
 import 'package:evently/models/event.dart';
 import 'package:evently/providers/event_provider.dart';
@@ -7,6 +9,7 @@ import 'package:evently/connection/firebase_service.dart';
 import 'package:evently/providers/settings_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/theme/apptheme.dart';
+import 'package:evently/widgets/add_map_button.dart';
 import 'package:evently/widgets/deafult_text_field.dart';
 import 'package:evently/widgets/login_button.dart';
 import 'package:evently/widgets/mytabbar.dart';
@@ -15,8 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class CreateEvent extends StatefulWidget {
@@ -37,10 +39,11 @@ class _CreateEventState extends State<CreateEvent> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  LatLng? selectedLocation;
+  String? address;
 
   String format(BuildContext context, TimeOfDay timeOfDay) {
-    final MaterialLocalizations localizations =
-        MaterialLocalizations.of(context);
+    final MaterialLocalizations localizations = MaterialLocalizations.of(context);
     return localizations.formatTimeOfDay(
       timeOfDay,
       alwaysUse24HourFormat: false,
@@ -52,11 +55,8 @@ class _CreateEventState extends State<CreateEvent> {
     bool isDark = Provider.of<SettingsProvider>(context).isDark;
     selectedCategory = MyCategory.myCategory[currentIndex + 1];
     TextStyle? myblackTextTheme = Theme.of(context).textTheme.bodyLarge;
-    TextStyle? myblueTextTheme = Theme.of(context)
-        .textTheme
-        .bodyLarge!
-        .copyWith(color: Apptheme.primary);
-
+    TextStyle? myblueTextTheme =
+        Theme.of(context).textTheme.bodyLarge!.copyWith(color: Apptheme.primary);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -64,7 +64,7 @@ class _CreateEventState extends State<CreateEvent> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: Text("create_event".tr()),
+          title: Text('create_event'.tr()),
         ),
         body: SafeArea(
           child: Column(
@@ -108,14 +108,13 @@ class _CreateEventState extends State<CreateEvent> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "title".tr(),
+                            'title'.tr(),
                             style: myblackTextTheme,
                           ),
                           DeafultTextFormField(
                             textEditingController: titleController,
-                            hintText: "event_title".tr(),
-                            borderColor:
-                                isDark ? Apptheme.primary : Apptheme.grey,
+                            hintText: 'event_title'.tr(),
+                            borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                             textStyle: Theme.of(context).textTheme.bodyLarge,
                             prefixImageName: 'note',
                             validator: (value) {
@@ -126,14 +125,13 @@ class _CreateEventState extends State<CreateEvent> {
                             },
                           ),
                           Text(
-                            "description".tr(),
+                            'description'.tr(),
                             style: myblackTextTheme,
                           ),
                           DeafultTextFormField(
                             textEditingController: descriptionController,
-                            hintText: "event_description".tr(),
-                            borderColor:
-                                isDark ? Apptheme.primary : Apptheme.grey,
+                            hintText: 'event_description'.tr(),
+                            borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                             textStyle: Theme.of(context).textTheme.bodyLarge,
                             maxLines: 4,
                             validator: (value) {
@@ -149,14 +147,12 @@ class _CreateEventState extends State<CreateEvent> {
                               SvgPicture.asset(
                                 'assets/icons/calendar.svg',
                                 colorFilter: ColorFilter.mode(
-                                  isDark
-                                      ? Apptheme.backgroundLight
-                                      : Apptheme.black,
+                                  isDark ? Apptheme.backgroundLight : Apptheme.black,
                                   BlendMode.srcIn,
                                 ),
                               ),
                               Text(
-                                "event_date".tr(),
+                                'event_date'.tr(),
                                 style: myblackTextTheme,
                               ),
                               const Spacer(),
@@ -168,8 +164,7 @@ class _CreateEventState extends State<CreateEvent> {
                                     lastDate: DateTime.now().add(
                                       const Duration(days: 365),
                                     ),
-                                    initialEntryMode:
-                                        DatePickerEntryMode.calendarOnly,
+                                    initialEntryMode: DatePickerEntryMode.calendarOnly,
                                   );
                                   if (date != null) {
                                     selectedDateTime = date;
@@ -179,7 +174,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 child: Text(
                                   selectedDateTime != null
                                       ? dateFormat.format(selectedDateTime!)
-                                      : "choose_date".tr(),
+                                      : 'choose_date'.tr(),
                                   style: myblueTextTheme,
                                 ),
                               ),
@@ -191,14 +186,12 @@ class _CreateEventState extends State<CreateEvent> {
                               SvgPicture.asset(
                                 'assets/icons/clock.svg',
                                 colorFilter: ColorFilter.mode(
-                                  isDark
-                                      ? Apptheme.backgroundLight
-                                      : Apptheme.black,
+                                  isDark ? Apptheme.backgroundLight : Apptheme.black,
                                   BlendMode.srcIn,
                                 ),
                               ),
                               Text(
-                                "event_time".tr(),
+                                'event_time'.tr(),
                                 style: myblackTextTheme,
                               ),
                               const Spacer(),
@@ -207,8 +200,7 @@ class _CreateEventState extends State<CreateEvent> {
                                   TimeOfDay? nowTime = await showTimePicker(
                                     context: context,
                                     initialTime: TimeOfDay.now(),
-                                    builder:
-                                        (BuildContext context, Widget? child) {
+                                    builder: (BuildContext context, Widget? child) {
                                       return MediaQuery(
                                         data: MediaQuery.of(context).copyWith(
                                           alwaysUse24HourFormat: false,
@@ -225,11 +217,26 @@ class _CreateEventState extends State<CreateEvent> {
                                 child: Text(
                                   timeOfDay != null
                                       ? format(context, timeOfDay!)
-                                      : "choose_time".tr(),
+                                      : 'choose_time'.tr(),
                                   style: myblueTextTheme,
                                 ),
                               ),
                             ],
+                          ),
+                          Text(
+                            'location'.tr(),
+                            style: myblackTextTheme,
+                          ),
+                          AddMapButton(
+                            onPickLocation: (location) async {
+                              selectedLocation = location;
+                              if (selectedLocation != null) {
+                                address =
+                                    await LocationService.getLocationDetails(selectedLocation!);
+                              }
+                              setState(() {});
+                            },
+                            text: address,
                           ),
                           DefaultButton(
                             onPressed: () {
@@ -252,9 +259,7 @@ class _CreateEventState extends State<CreateEvent> {
 
   void createEvent(BuildContext context) async {
     bool isDark = Provider.of<SettingsProvider>(context, listen: false).isDark;
-    if (formKey.currentState!.validate() &&
-        selectedDateTime != null &&
-        timeOfDay != null) {
+    if (formKey.currentState!.validate() && selectedDateTime != null && timeOfDay != null) {
       DateTime dateTime = DateTime(
         selectedDateTime!.year,
         selectedDateTime!.month,
@@ -263,6 +268,9 @@ class _CreateEventState extends State<CreateEvent> {
         timeOfDay!.minute,
       );
       Event event = Event(
+        address: address,
+        latitude: selectedLocation?.latitude,
+        longitude: selectedLocation?.longitude,
         uId: Provider.of<UserProvider>(context, listen: false).user!.id,
         category: selectedCategory,
         title: titleController.text,
@@ -271,14 +279,12 @@ class _CreateEventState extends State<CreateEvent> {
       );
       await FirebaseService.addEventToFireStore(event).then(
         (value) {
-          EventProvider prov =
-              Provider.of<EventProvider>(context, listen: false);
+          EventProvider prov = Provider.of<EventProvider>(context, listen: false);
           prov.getEvents();
           AwesomeDialog(
             btnCancelColor: Colors.green,
             btnOkColor: Apptheme.primary,
-            dialogBackgroundColor:
-                isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
+            dialogBackgroundColor: isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
             context: context,
             dialogType: DialogType.success,
             animType: AnimType.topSlide,
@@ -302,6 +308,20 @@ class _CreateEventState extends State<CreateEvent> {
           );
         }
       });
-    } else {}
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+          backgroundColor: Apptheme.primary,
+          content: AutoSizeText(
+            'PLease Fill Out All The Info',
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: Apptheme.white,
+                ),
+          ),
+        ),
+      );
+    }
   }
 }

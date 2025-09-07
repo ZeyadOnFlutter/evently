@@ -1,27 +1,24 @@
-import 'dart:developer';
-
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/connection/firebase_service.dart';
-import 'package:evently/models/user.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/providers/user_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/view/auth/register.dart';
-import 'package:evently/view/home/home_screen.dart';
-import 'package:evently/widgets/custom_outlinedbutton.dart';
-import 'package:evently/widgets/deafult_text_field.dart';
-import 'package:evently/widgets/loading_indicator.dart';
-import 'package:evently/widgets/login_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import '../../connection/firebase_service.dart';
+import '../../models/user.dart';
+import '../../providers/settings_provider.dart';
+import '../../providers/user_provider.dart';
+import '../../theme/apptheme.dart';
+import '../../widgets/custom_outlinedbutton.dart';
+import '../../widgets/deafult_text_field.dart';
+import '../../widgets/loading_indicator.dart';
+import '../../widgets/login_button.dart';
+import '../home/home_screen.dart';
+import 'register.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -50,7 +47,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDark = Provider.of<SettingsProvider>(context).isDark;
+    final bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -69,7 +66,7 @@ class _LoginState extends State<Login> {
                   DeafultTextFormField(
                     borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                     textEditingController: emailController,
-                    hintText: "email".tr(),
+                    hintText: 'email'.tr(),
                     prefixImageName: 'email',
                     textStyle: GoogleFonts.inter(
                       fontSize: 16.sp,
@@ -78,10 +75,10 @@ class _LoginState extends State<Login> {
                     ),
                     textInputType: TextInputType.emailAddress,
                     validator: (value) {
-                      final bool isValid = RegExp(
-                              r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-                          .hasMatch(value!);
-                      if (value == null || value.isEmpty) {
+                      final bool isValid =
+                          RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                              .hasMatch(value!);
+                      if (value.isEmpty) {
                         return 'Please Enter Your Email';
                       } else if (!isValid) {
                         return 'Please Enter A Valid Email';
@@ -96,7 +93,7 @@ class _LoginState extends State<Login> {
                     borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                     textEditingController: passwordController,
                     isPassword: true,
-                    hintText: "password".tr(),
+                    hintText: 'password'.tr(),
                     textStyle: GoogleFonts.inter(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
@@ -119,7 +116,7 @@ class _LoginState extends State<Login> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      "forget_password".tr(),
+                      'forget_password'.tr(),
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.w700,
                         color: Apptheme.primary,
@@ -134,7 +131,7 @@ class _LoginState extends State<Login> {
                     height: 24.h,
                   ),
                   DefaultButton(
-                    label: "login".tr(),
+                    label: 'login'.tr(),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         FirebaseService.login(
@@ -144,9 +141,8 @@ class _LoginState extends State<Login> {
                             awesomeLoginDialog = AwesomeDialog(
                               dismissOnTouchOutside: false,
                               btnOkColor: Apptheme.primary,
-                              dialogBackgroundColor: isDark
-                                  ? Apptheme.backgroundDark
-                                  : Apptheme.backgroundLight,
+                              dialogBackgroundColor:
+                                  isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                               context: context,
                               dialogType: DialogType.noHeader,
                               animType: AnimType.topSlide,
@@ -163,9 +159,8 @@ class _LoginState extends State<Login> {
                             AwesomeDialog(
                               btnCancelColor: const Color(0xfff44369),
                               btnOkColor: Apptheme.primary,
-                              dialogBackgroundColor: isDark
-                                  ? Apptheme.backgroundDark
-                                  : Apptheme.backgroundLight,
+                              dialogBackgroundColor:
+                                  isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                               context: context,
                               dialogType: DialogType.error,
                               animType: AnimType.topSlide,
@@ -184,9 +179,8 @@ class _LoginState extends State<Login> {
                               },
                               btnCancelColor: Colors.green,
                               btnOkColor: Apptheme.primary,
-                              dialogBackgroundColor: isDark
-                                  ? Apptheme.backgroundDark
-                                  : Apptheme.backgroundLight,
+                              dialogBackgroundColor:
+                                  isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                               context: context,
                               dialogType: DialogType.success,
                               animType: AnimType.topSlide,
@@ -235,7 +229,7 @@ class _LoginState extends State<Login> {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: "do_not_have_account".tr(),
+                          text: 'do_not_have_account'.tr(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         TextSpan(
@@ -246,15 +240,14 @@ class _LoginState extends State<Login> {
                                 Register.routeName,
                               );
                             },
-                          text: "create_account".tr(),
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: Apptheme.primary,
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: Apptheme.primary,
-                                    fontStyle: FontStyle.italic,
-                                  ),
+                          text: 'create_account'.tr(),
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: Apptheme.primary,
+                                decoration: TextDecoration.underline,
+                                decorationColor: Apptheme.primary,
+                                fontStyle: FontStyle.italic,
+                              ),
                         ),
                       ],
                     ),
@@ -274,7 +267,7 @@ class _LoginState extends State<Login> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         child: Text(
-                          "or".tr(),
+                          'or'.tr(),
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge!
@@ -303,9 +296,8 @@ class _LoginState extends State<Login> {
                             awesomeGoogleLoginDialog = AwesomeDialog(
                               dismissOnTouchOutside: false,
                               btnOkColor: Apptheme.primary,
-                              dialogBackgroundColor: isDark
-                                  ? Apptheme.backgroundDark
-                                  : Apptheme.backgroundLight,
+                              dialogBackgroundColor:
+                                  isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                               context: context,
                               dialogType: DialogType.noHeader,
                               animType: AnimType.topSlide,
@@ -322,9 +314,8 @@ class _LoginState extends State<Login> {
                             AwesomeDialog(
                               btnCancelColor: const Color(0xfff44369),
                               btnOkColor: Apptheme.primary,
-                              dialogBackgroundColor: isDark
-                                  ? Apptheme.backgroundDark
-                                  : Apptheme.backgroundLight,
+                              dialogBackgroundColor:
+                                  isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                               context: context,
                               dialogType: DialogType.error,
                               animType: AnimType.topSlide,
@@ -338,9 +329,8 @@ class _LoginState extends State<Login> {
                             AwesomeDialog(
                               btnCancelColor: const Color(0xfff44369),
                               btnOkColor: Apptheme.primary,
-                              dialogBackgroundColor: isDark
-                                  ? Apptheme.backgroundDark
-                                  : Apptheme.backgroundLight,
+                              dialogBackgroundColor:
+                                  isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                               context: context,
                               dialogType: DialogType.error,
                               animType: AnimType.topSlide,
@@ -356,9 +346,8 @@ class _LoginState extends State<Login> {
                               },
                               btnCancelColor: Colors.green,
                               btnOkColor: Apptheme.primary,
-                              dialogBackgroundColor: isDark
-                                  ? Apptheme.backgroundDark
-                                  : Apptheme.backgroundLight,
+                              dialogBackgroundColor:
+                                  isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                               context: context,
                               dialogType: DialogType.success,
                               animType: AnimType.topSlide,
@@ -386,7 +375,7 @@ class _LoginState extends State<Login> {
                         () => languageValue = i,
                       );
                       context.setLocale(
-                        languageValue == 0 ? Locale('en') : Locale('ar'),
+                        languageValue == 0 ? const Locale('en') : const Locale('ar'),
                       );
                     },
                     iconBuilder: (value, foreground) => value == 0
@@ -409,7 +398,7 @@ class _LoginState extends State<Login> {
                       backgroundColor: Colors.transparent,
                       borderRadius: BorderRadius.circular(30.r),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

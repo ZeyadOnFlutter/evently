@@ -27,6 +27,7 @@ class Apptheme {
         color: Apptheme.primary,
       ),
     ),
+    bottomAppBarTheme: const BottomAppBarTheme(color: Apptheme.primary),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Apptheme.primary,
       elevation: 0,
@@ -101,6 +102,7 @@ class Apptheme {
         color: Apptheme.primary,
       ),
     ),
+    bottomAppBarTheme: const BottomAppBarTheme(color: backgroundDark),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: backgroundDark,
       elevation: 0,

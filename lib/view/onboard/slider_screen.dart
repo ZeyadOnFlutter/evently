@@ -1,16 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/view/auth/login.dart';
-import 'package:evently/view/auth/register.dart';
-import 'package:evently/view/home/home_screen.dart';
-import 'package:evently/view/onboard/slider_texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../../providers/settings_provider.dart';
+import '../../theme/apptheme.dart';
+import '../auth/register.dart';
+import 'slider_texts.dart';
 
 class SliderScreen extends StatefulWidget {
   const SliderScreen({super.key});
@@ -32,7 +31,7 @@ class _SliderScreenState extends State<SliderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDark = Provider.of<SettingsProvider>(context).isDark;
+    final bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -72,21 +71,19 @@ class _SliderScreenState extends State<SliderScreen> {
                         ),
                         Text(
                           MySlider.sliderHeader[index].tr(),
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: Apptheme.primary,
-                                  ),
+                          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: Apptheme.primary,
+                              ),
                         ),
                         SizedBox(
                           height: 39.h,
                         ),
                         Text(
                           MySlider.sliderDescription[index].tr(),
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    height: 1.2,
-                                  ),
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                height: 1.2,
+                              ),
                         ),
                       ],
                     );
@@ -108,7 +105,7 @@ class _SliderScreenState extends State<SliderScreen> {
                               currentIndex--;
                               pageController.animateToPage(
                                 currentIndex,
-                                duration: Duration(milliseconds: 500),
+                                duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeIn,
                               );
                             },
@@ -156,8 +153,7 @@ class _SliderScreenState extends State<SliderScreen> {
                     InkWell(
                       onTap: () async {
                         if (isLastPage) {
-                          SharedPreferences pref =
-                              await SharedPreferences.getInstance();
+                          final SharedPreferences pref = await SharedPreferences.getInstance();
                           pref.setBool('endSlider', true);
                           Navigator.pushReplacementNamed(
                             context,
@@ -170,21 +166,15 @@ class _SliderScreenState extends State<SliderScreen> {
                           );
                         }
                       },
-                      child: isDark
-                          ? isEnglish
-                              ? SvgPicture.asset(
-                                  'assets/icons/arrowright.svg',
-                                )
-                              : SvgPicture.asset(
-                                  'assets/icons/arrowleft.svg',
-                                )
-                          : isEnglish
-                              ? SvgPicture.asset(
-                                  'assets/icons/leftarrow.svg',
-                                )
-                              : SvgPicture.asset(
-                                  'assets/icons/rightarrow.svg',
-                                ),
+                      child: SvgPicture.asset(
+                        isDark
+                            ? (isEnglish
+                                ? 'assets/icons/arrowright.svg'
+                                : 'assets/icons/arrowleft.svg')
+                            : (isEnglish
+                                ? 'assets/icons/leftarrow.svg'
+                                : 'assets/icons/rightarrow.svg'),
+                      ),
                     ),
                   ],
                 ),

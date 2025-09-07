@@ -1,17 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/connection/firebase_service.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/providers/user_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/view/auth/login.dart';
-import 'package:evently/widgets/profile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../connection/firebase_service.dart';
+import '../../providers/settings_provider.dart';
+import '../../providers/user_provider.dart';
+import '../../theme/apptheme.dart';
+import '../../widgets/profile_header.dart';
+import '../auth/login.dart';
 
 class ProfileTab extends StatefulWidget {
-  ProfileTab({super.key});
+  const ProfileTab({super.key});
 
   @override
   State<ProfileTab> createState() => _ProfileTabState();
@@ -25,7 +25,7 @@ class _ProfileTabState extends State<ProfileTab> {
 
   @override
   Widget build(BuildContext context) {
-    SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
+    final SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       body: Column(
         children: [
@@ -39,28 +39,27 @@ class _ProfileTabState extends State<ProfileTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "darkmode".tr(),
+                  'darkmode'.tr(),
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: settingsProvider.isDark
-                            ? Apptheme.backgroundLight
-                            : Apptheme.black,
+                        color: settingsProvider.isDark ? Apptheme.backgroundLight : Apptheme.black,
                       ),
                 ),
                 Switch(
                   inactiveTrackColor: Colors.transparent,
                   activeTrackColor: Colors.transparent,
                   thumbColor: const WidgetStatePropertyAll(Apptheme.primary),
-                  trackOutlineColor:
-                      const WidgetStatePropertyAll(Apptheme.primary),
-                  thumbIcon: const WidgetStatePropertyAll(Icon(
-                    Icons.circle,
-                    color: Apptheme.primary,
-                  )),
+                  trackOutlineColor: const WidgetStatePropertyAll(Apptheme.primary),
+                  thumbIcon: const WidgetStatePropertyAll(
+                    Icon(
+                      Icons.circle,
+                      color: Apptheme.primary,
+                    ),
+                  ),
                   value: settingsProvider.isDark,
                   onChanged: (isDark) {
                     settingsProvider.changeTheme(
-                      isDark ? ThemeMode.dark : ThemeMode.light,
+                      isDark ? AppTheme.dark : AppTheme.light,
                     );
                   },
                 ),
@@ -76,12 +75,10 @@ class _ProfileTabState extends State<ProfileTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "language".tr(),
+                  'language'.tr(),
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: settingsProvider.isDark
-                            ? Apptheme.backgroundLight
-                            : Apptheme.black,
+                        color: settingsProvider.isDark ? Apptheme.backgroundLight : Apptheme.black,
                       ),
                 ),
                 DropdownButtonHideUnderline(
@@ -98,11 +95,10 @@ class _ProfileTabState extends State<ProfileTab> {
                           value: languages.code,
                           child: Text(
                             languages.name,
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: Apptheme.primary,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  color: Apptheme.primary,
+                                  fontWeight: FontWeight.w700,
+                                ),
                           ),
                         );
                       },
@@ -113,7 +109,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       setState(() {});
                     },
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -127,8 +123,7 @@ class _ProfileTabState extends State<ProfileTab> {
               onPressed: () {
                 FirebaseService.logout().then(
                   (value) {
-                    Provider.of<UserProvider>(context, listen: false)
-                        .updateUser(null);
+                    Provider.of<UserProvider>(context, listen: false).updateUser(null);
                     Navigator.of(context).pushReplacementNamed(Login.routeName);
                   },
                 );
@@ -157,16 +152,16 @@ class _ProfileTabState extends State<ProfileTab> {
                           color: Apptheme.backgroundLight,
                         ),
                   Text(
-                    "logout".tr(),
+                    'logout'.tr(),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Apptheme.backgroundLight,
                           fontSize: 20,
                         ),
-                  )
+                  ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

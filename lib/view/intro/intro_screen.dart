@@ -1,15 +1,15 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/view/onboard/slider_screen.dart';
-import 'package:evently/widgets/login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/settings_provider.dart';
+import '../../theme/apptheme.dart';
+import '../../widgets/login_button.dart';
+import '../onboard/slider_screen.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -61,7 +61,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "start_title".tr(),
+                        'start_title'.tr(),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontWeight: FontWeight.w700,
                               color: Apptheme.primary,
@@ -71,7 +71,7 @@ class _IntroScreenState extends State<IntroScreen> {
                         height: 20.h,
                       ),
                       Text(
-                        "start_body".tr(),
+                        'start_body'.tr(),
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               height: 1.2,
                             ),
@@ -83,7 +83,7 @@ class _IntroScreenState extends State<IntroScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "language".tr(),
+                            'language'.tr(),
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
@@ -99,9 +99,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                 () => languageValue = i,
                               );
                               context.setLocale(
-                                languageValue == 0
-                                    ? Locale('en')
-                                    : Locale('ar'),
+                                languageValue == 0 ? const Locale('en') : const Locale('ar'),
                               );
                             },
                             iconBuilder: (value, foreground) => value == 0
@@ -124,7 +122,7 @@ class _IntroScreenState extends State<IntroScreen> {
                               backgroundColor: Colors.transparent,
                               borderRadius: BorderRadius.circular(30.r),
                             ),
-                          )
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -134,7 +132,7 @@ class _IntroScreenState extends State<IntroScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "theme".tr(),
+                            'theme'.tr(),
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
@@ -159,9 +157,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                 context,
                                 listen: false,
                               ).changeTheme(
-                                themeValue == 0
-                                    ? ThemeMode.light
-                                    : ThemeMode.dark,
+                                themeValue == 0 ? AppTheme.light : AppTheme.dark,
                               );
                             },
                             iconBuilder: (value, foreground) => value == 0
@@ -194,7 +190,7 @@ class _IntroScreenState extends State<IntroScreen> {
                               backgroundColor: Colors.transparent,
                               borderRadius: BorderRadius.circular(30.r),
                             ),
-                          )
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -205,7 +201,7 @@ class _IntroScreenState extends State<IntroScreen> {
                           bottom: 28.h,
                         ),
                         child: DefaultButton(
-                          label: "lets_start".tr(),
+                          label: 'lets_start'.tr(),
                           onPressed: () {
                             Navigator.pushReplacementNamed(
                               context,

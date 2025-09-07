@@ -1,14 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/models/category.dart';
-import 'package:evently/providers/event_provider.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/providers/user_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/widgets/icon_item.dart';
-import 'package:evently/widgets/mytabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
+import '../models/category.dart';
+import '../providers/event_provider.dart';
+import '../providers/location_provider.dart';
+import '../providers/settings_provider.dart';
+import '../providers/user_provider.dart';
+import '../theme/apptheme.dart';
+import 'icon_item.dart';
+import 'mytabbar.dart';
 
 class HomeHeader extends StatefulWidget {
   const HomeHeader({super.key});
@@ -22,7 +24,8 @@ class _HomeHeaderState extends State<HomeHeader> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDark = Provider.of<SettingsProvider>(context).isDark;
+    final bool isDark = Provider.of<SettingsProvider>(context).isDark;
+    final locationProvider = Provider.of<LocationProvider>(context);
     return Container(
       width: double.infinity,
       height: 198.h,
@@ -49,6 +52,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
+                        // ignore: prefer_single_quotes
                         "welcome_back".tr(),
                         style: Theme.of(context)
                             .textTheme
@@ -57,20 +61,20 @@ class _HomeHeaderState extends State<HomeHeader> {
                       ),
                       Text(
                         Provider.of<UserProvider>(context).user!.name,
-                        style: Theme.of(context).textTheme.displayMedium!,
+                        style: Theme.of(context).textTheme.displayMedium,
                       ),
                     ],
                   ),
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      SettingsProvider settingsProvider =
+                      final SettingsProvider settingsProvider =
                           Provider.of<SettingsProvider>(context, listen: false);
                       settingsProvider.isDark
-                          ? settingsProvider.changeTheme(ThemeMode.light)
-                          : settingsProvider.changeTheme(ThemeMode.dark);
+                          ? settingsProvider.changeTheme(AppTheme.light)
+                          : settingsProvider.changeTheme(AppTheme.dark);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.wb_sunny_outlined,
                       color: Apptheme.backgroundLight,
                     ),
@@ -90,25 +94,20 @@ class _HomeHeaderState extends State<HomeHeader> {
                         onTap: () {
                           context.setLocale(
                             context.locale.toString() == 'en'
-                                ? Locale('ar')
-                                : Locale('en'),
+                                ? const Locale('ar')
+                                : const Locale('en'),
                           );
                         },
                         child: Text(
                           context.locale.toString() == 'en' ? 'EN' : 'عربى',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium!
-                              .copyWith(
+                          style: Theme.of(context).textTheme.displayMedium!.copyWith(
                                 fontSize: 14,
-                                color: isDark
-                                    ? Apptheme.backgroundDark
-                                    : Apptheme.primary,
+                                color: isDark ? Apptheme.backgroundDark : Apptheme.primary,
                               ),
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -128,17 +127,11 @@ class _HomeHeaderState extends State<HomeHeader> {
                     width: 8,
                   ),
                   Text(
-                    '${"cairo".tr()} , ',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: Apptheme.backgroundLight),
-                  ),
-                  Text(
-                    "egypt".tr(),
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Apptheme.backgroundLight,
-                        ),
+                    '${locationProvider.address ?? "cairo".tr()} , ',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontWeight: FontWeight.w500, color: Apptheme.backgroundLight),
                   ),
                 ],
               ),

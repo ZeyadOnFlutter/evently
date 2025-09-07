@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DefaultButton extends StatelessWidget {
-  const DefaultButton(
-      {required this.onPressed, required this.label, super.key});
+  const DefaultButton({required this.onPressed, required this.label, super.key});
   final VoidCallback onPressed;
   final String label;
   @override

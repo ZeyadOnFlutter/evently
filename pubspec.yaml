@@ -2,7 +2,7 @@ name: evently
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animated_toggle_switch: ^0.8.4
+  auto_size_text: ^3.0.0
   awesome_dialog: ^3.2.1
   cloud_firestore: ^5.6.1
   cupertino_icons: ^1.0.8
@@ -43,13 +44,18 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.0.17
   fluttertoast: ^8.2.10
+  geocoding: ^4.0.0
+  geolocator: ^13.0.1
   google_fonts: ^6.2.1
+  google_maps_flutter: ^2.12.3
   google_sign_in: ^6.2.2
   iconsax_flutter: ^1.0.0
-  intl: ^0.19.0
+  intl: 0.19.0
   lottie: ^3.3.1
+  permission_handler: ^12.0.1
   provider: ^6.1.2
-  shared_preferences: ^2.3.5
+  readmore: ^3.0.0
+  shared_preferences: ^2.5.3
   smooth_page_indicator: ^1.2.0+3
 
 dev_dependencies:
@@ -61,7 +67,6 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

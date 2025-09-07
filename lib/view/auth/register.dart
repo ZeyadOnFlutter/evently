@@ -1,23 +1,21 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/connection/firebase_service.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/utils/ut_utils.dart';
-import 'package:evently/view/auth/login.dart';
-import 'package:evently/widgets/deafult_text_field.dart';
-import 'package:evently/widgets/loading_indicator.dart';
-import 'package:evently/widgets/login_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import '../../connection/firebase_service.dart';
+import '../../providers/settings_provider.dart';
+import '../../theme/apptheme.dart';
+import '../../widgets/deafult_text_field.dart';
+import '../../widgets/loading_indicator.dart';
+import '../../widgets/login_button.dart';
+import 'login.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -47,7 +45,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDark = Provider.of<SettingsProvider>(context).isDark;
+    final bool isDark = Provider.of<SettingsProvider>(context).isDark;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -74,7 +72,7 @@ class _RegisterState extends State<Register> {
                   textCapitalization: TextCapitalization.words,
                   borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: nameController,
-                  hintText: "name".tr(),
+                  hintText: 'name'.tr(),
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
@@ -97,7 +95,7 @@ class _RegisterState extends State<Register> {
                 DeafultTextFormField(
                   borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: emailController,
-                  hintText: "email".tr(),
+                  hintText: 'email'.tr(),
                   textInputFormatter: FilteringTextInputFormatter.allow(
                     RegExp(
                       r'^[a-zA-Z0-9@._-]*$',
@@ -112,9 +110,9 @@ class _RegisterState extends State<Register> {
                   textInputType: TextInputType.emailAddress,
                   validator: (value) {
                     final bool isValid = RegExp(
-                            r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-                        .hasMatch(value!);
-                    if (value == null || value.isEmpty) {
+                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                    ).hasMatch(value!);
+                    if (value.isEmpty) {
                       return 'Please Enter Your Email';
                     } else if (!isValid) {
                       return 'Please Enter A Valid Email';
@@ -129,7 +127,7 @@ class _RegisterState extends State<Register> {
                   borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: passwordController,
                   isPassword: true,
-                  hintText: "password".tr(),
+                  hintText: 'password'.tr(),
                   textStyle: GoogleFonts.inter(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
@@ -153,7 +151,7 @@ class _RegisterState extends State<Register> {
                   borderColor: isDark ? Apptheme.primary : Apptheme.grey,
                   textEditingController: repasswordController,
                   isPassword: true,
-                  hintText: "re_password".tr(),
+                  hintText: 're_password'.tr(),
                   textInputType: TextInputType.text,
                   prefixImageName: 'lock',
                   textStyle: GoogleFonts.inter(
@@ -165,8 +163,6 @@ class _RegisterState extends State<Register> {
                     if (value == null || value.isEmpty) {
                       return 'Please Confirm Your Password';
                     } else if (value != passwordController.text) {
-                      print(passwordController.text);
-                      print(value);
                       return 'Passwords do not match. Please try again';
                     }
                     return null;
@@ -176,7 +172,7 @@ class _RegisterState extends State<Register> {
                   height: 16.h,
                 ),
                 DefaultButton(
-                  label: "register".tr(),
+                  label: 'register'.tr(),
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       FirebaseService.register(
@@ -187,9 +183,8 @@ class _RegisterState extends State<Register> {
                           awesomeRegisterDialog = AwesomeDialog(
                             dismissOnTouchOutside: false,
                             btnOkColor: Apptheme.primary,
-                            dialogBackgroundColor: isDark
-                                ? Apptheme.backgroundDark
-                                : Apptheme.backgroundLight,
+                            dialogBackgroundColor:
+                                isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                             context: context,
                             dialogType: DialogType.noHeader,
                             animType: AnimType.topSlide,
@@ -209,9 +204,8 @@ class _RegisterState extends State<Register> {
                             dismissOnTouchOutside: false,
                             btnCancelColor: Colors.green,
                             btnOkColor: Apptheme.primary,
-                            dialogBackgroundColor: isDark
-                                ? Apptheme.backgroundDark
-                                : Apptheme.backgroundLight,
+                            dialogBackgroundColor:
+                                isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                             context: context,
                             dialogType: DialogType.success,
                             animType: AnimType.topSlide,
@@ -227,9 +221,8 @@ class _RegisterState extends State<Register> {
                           AwesomeDialog(
                             btnCancelColor: const Color(0xfff44369),
                             btnOkColor: Apptheme.primary,
-                            dialogBackgroundColor: isDark
-                                ? Apptheme.backgroundDark
-                                : Apptheme.backgroundLight,
+                            dialogBackgroundColor:
+                                isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                             context: context,
                             dialogType: DialogType.error,
                             animType: AnimType.topSlide,
@@ -265,7 +258,7 @@ class _RegisterState extends State<Register> {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: "already_have_account".tr(),
+                        text: 'already_have_account'.tr(),
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       TextSpan(
@@ -276,7 +269,7 @@ class _RegisterState extends State<Register> {
                               Login.routeName,
                             );
                           },
-                        text: "login".tr(),
+                        text: 'login'.tr(),
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               fontWeight: FontWeight.w700,
                               color: Apptheme.primary,
@@ -301,7 +294,7 @@ class _RegisterState extends State<Register> {
                       () => languageValue = i,
                     );
                     context.setLocale(
-                      languageValue == 0 ? Locale('en') : Locale('ar'),
+                      languageValue == 0 ? const Locale('en') : const Locale('ar'),
                     );
                   },
                   iconBuilder: (value, foreground) => value == 0
@@ -324,7 +317,7 @@ class _RegisterState extends State<Register> {
                     backgroundColor: Colors.transparent,
                     borderRadius: BorderRadius.circular(30.r),
                   ),
-                )
+                ),
               ],
             ),
           ),

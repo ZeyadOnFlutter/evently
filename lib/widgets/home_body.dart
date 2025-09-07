@@ -16,15 +16,13 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
-    EventProvider prov = Provider.of<EventProvider>(context);
+    EventProvider eventListProvider = Provider.of<EventProvider>(context);
     bool isDark = Provider.of<SettingsProvider>(context).isDark;
-    return prov.filteredEvents.isEmpty
+    return eventListProvider.filteredEvents.isEmpty
         ? Expanded(
             child: Center(
               child: LottieBuilder.asset(
-                isDark
-                    ? 'assets/lottie/event_dark.json'
-                    : 'assets/lottie/event.json',
+                isDark ? 'assets/lottie/event_dark.json' : 'assets/lottie/event.json',
               ),
             ),
           )
@@ -35,20 +33,20 @@ class _HomeBodyState extends State<HomeBody> {
                   height: 16.h,
                 );
               },
-              itemCount: prov.filteredEvents.length,
+              itemCount: eventListProvider.filteredEvents.length,
               padding: EdgeInsets.symmetric(
                 horizontal: 16.w,
                 vertical: 16.h,
               ),
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: index == prov.filteredEvents.length - 1
+                  padding: index == eventListProvider.filteredEvents.length - 1
                       ? EdgeInsets.only(
                           bottom: 75.h,
                         )
                       : EdgeInsets.zero,
                   child: CategoryItem(
-                    event: prov.filteredEvents[index],
+                    event: eventListProvider.filteredEvents[index],
                   ),
                 );
               },

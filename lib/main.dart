@@ -1,20 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/providers/event_provider.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/providers/user_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/view/auth/login.dart';
-import 'package:evently/view/auth/register.dart';
-import 'package:evently/view/event/create_event.dart';
-import 'package:evently/view/home/home_screen.dart';
-import 'package:evently/view/intro/intro_screen.dart';
-import 'package:evently/view/onboard/slider_screen.dart';
-import 'package:evently/view/update/update_event.dart';
-import 'package:evently/widgets/event_details.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
+import 'providers/event_provider.dart';
+import 'providers/location_provider.dart';
+import 'providers/settings_provider.dart';
+import 'providers/user_provider.dart';
+import 'theme/apptheme.dart';
+import 'view/auth/login.dart';
+import 'view/auth/register.dart';
+import 'view/event/create_event.dart';
+import 'view/home/home_screen.dart';
+import 'view/intro/intro_screen.dart';
+import 'view/onboard/slider_screen.dart';
+import 'view/update/update_event.dart';
+import 'widgets/event_details.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,15 +32,17 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => SettingsProvider()
-            ..loadString()
-            ..loadTheme(),
+          create: (context) => SettingsProvider()..loadSettings(),
         ),
         ChangeNotifierProvider(
           create: (context) => EventProvider()..getEvents(),
         ),
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => LocationProvider()..fetchCurrentLocation(context),
         ),
       ],
       child: EasyLocalization(
@@ -75,6 +79,8 @@ class Evently extends StatelessWidget {
           theme: Apptheme.lightTheme,
           darkTheme: Apptheme.darkTheme,
           themeMode: Provider.of<SettingsProvider>(context).themeMode,
+          themeAnimationDuration: const Duration(milliseconds: 500),
+          themeAnimationCurve: Curves.easeInOut,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,

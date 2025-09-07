@@ -1,17 +1,16 @@
-import 'package:evently/connection/firebase_service.dart';
-import 'package:evently/models/event.dart';
-import 'package:evently/providers/event_provider.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/view/update/update_event.dart';
-import 'package:evently/widgets/eventdetails_calendaritem.dart';
-import 'package:evently/widgets/eventdetails_locationitem.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../connection/firebase_service.dart';
+import '../models/event.dart';
+import '../providers/event_provider.dart';
+import '../providers/settings_provider.dart';
+import '../theme/apptheme.dart';
+import '../view/update/update_event.dart';
+import 'eventdetails_calendaritem.dart';
+import 'eventdetails_locationitem.dart';
 
 class EventDetails extends StatelessWidget {
   EventDetails({super.key});
@@ -42,8 +41,7 @@ class EventDetails extends StatelessWidget {
             onTap: () {
               FirebaseService.deleteEventFromFireStore(event).then(
                 (_) {
-                  Provider.of<EventProvider>(context, listen: false)
-                      .getEvents();
+                  Provider.of<EventProvider>(context, listen: false).getEvents();
                   Navigator.of(context).pop();
                 },
               );
@@ -93,7 +91,7 @@ class EventDetails extends StatelessWidget {
                     SizedBox(
                       height: 16.h,
                     ),
-                    EventdetailsLocationitem(),
+                    const EventdetailsLocationitem(),
                     SizedBox(
                       height: 16.h,
                     ),
@@ -112,10 +110,7 @@ class EventDetails extends StatelessWidget {
                     ),
                     Text(
                       event.description,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(height: 1.1),
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(height: 1.1),
                     ),
                     SizedBox(
                       height: 16.h,

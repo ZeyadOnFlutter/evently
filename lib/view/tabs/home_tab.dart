@@ -14,7 +14,7 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        HomeHeader(),
+        const HomeHeader(),
         HomeBody(),
       ],
     );

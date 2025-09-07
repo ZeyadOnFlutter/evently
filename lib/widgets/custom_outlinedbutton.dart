@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../theme/apptheme.dart';
 
 class CustomOutlinedbutton extends StatelessWidget {
   CustomOutlinedbutton({required this.onPressed, super.key});
@@ -12,7 +13,7 @@ class CustomOutlinedbutton extends StatelessWidget {
     return OutlinedButton.icon(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-        side: BorderSide(
+        side: const BorderSide(
           color: Apptheme.primary,
         ),
         shape: RoundedRectangleBorder(

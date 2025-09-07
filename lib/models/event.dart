@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/models/category.dart';
-import 'package:flutter/material.dart';
 
 class Event {
   String id;
@@ -9,6 +8,9 @@ class Event {
   String title;
   String description;
   DateTime dateTime;
+  double? latitude;
+  double? longitude;
+  String? address;
 
   Event({
     this.id = '',
@@ -17,6 +19,9 @@ class Event {
     required this.title,
     required this.description,
     required this.dateTime,
+    this.latitude,
+    this.longitude,
+    this.address,
   });
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
@@ -30,6 +35,9 @@ class Event {
       title: json['title'],
       description: json['description'],
       dateTime: (json['dateTime'] as Timestamp).toDate(),
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      address: json['address'],
     );
   }
   Map<String, dynamic> toJson() => {
@@ -39,5 +47,8 @@ class Event {
         'title': title,
         'description': description,
         'dateTime': Timestamp.fromDate(dateTime),
+        'latitude': latitude,
+        'longitude': longitude,
+        'address': address,
       };
 }

@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class MyCategory {
@@ -15,7 +14,7 @@ class MyCategory {
   static List<MyCategory> myCategory = [
     MyCategory(
       id: '0',
-      categoryName: "all".tr(),
+      categoryName: "all",
       iconName: Icons.explore_outlined,
       imageName: '',
     ),
