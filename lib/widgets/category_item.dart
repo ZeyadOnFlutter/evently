@@ -1,13 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/models/event.dart';
-import 'package:evently/providers/event_provider.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/providers/user_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/widgets/event_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
+import '../models/event.dart';
+import '../providers/event_provider.dart';
+import '../providers/settings_provider.dart';
+import '../providers/user_provider.dart';
+import '../theme/apptheme.dart';
+import 'event_details.dart';
 
 class CategoryItem extends StatelessWidget {
   const CategoryItem({required this.event, super.key});
@@ -17,8 +18,7 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isDark = Provider.of<SettingsProvider>(context).isDark;
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    EventProvider eventProvider =
-        Provider.of<EventProvider>(context, listen: false);
+    EventProvider eventProvider = Provider.of<EventProvider>(context, listen: false);
     bool isFavourite = userProvider.checkIsFavourite(event.id);
     return InkWell(
       onTap: () {
@@ -57,8 +57,7 @@ class CategoryItem extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(8.r),
               decoration: BoxDecoration(
-                color:
-                    isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
+                color: isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
                 borderRadius: BorderRadius.all(
                   Radius.circular(8.r),
                 ),
@@ -90,8 +89,7 @@ class CategoryItem extends StatelessWidget {
             ),
             margin: EdgeInsets.all(8.r),
             decoration: BoxDecoration(
-              color:
-                  isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
+              color: isDark ? Apptheme.backgroundDark : Apptheme.backgroundLight,
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Row(
@@ -102,9 +100,7 @@ class CategoryItem extends StatelessWidget {
                     event.description,
                     style: Theme.of(context).textTheme.displayMedium!.copyWith(
                           fontSize: 14,
-                          color: isDark
-                              ? Apptheme.backgroundLight
-                              : Apptheme.black,
+                          color: isDark ? Apptheme.backgroundLight : Apptheme.black,
                           height: 1.35.h,
                         ),
                   ),
@@ -118,17 +114,14 @@ class CategoryItem extends StatelessWidget {
                       if (isFavourite) {
                         userProvider.removeEventToFavourite(event.id);
                         eventProvider.removeEventToFavourite(event.id);
-                        eventProvider
-                            .filterFavourites(userProvider.user!.favouriteIds);
+                        eventProvider.filterFavourites(userProvider.user!.favouriteIds);
                       } else {
                         userProvider.addEventToFavourite(event.id);
                         eventProvider.addEventToFavourite(event.id);
                       }
                     },
                     icon: Icon(
-                      isFavourite
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_border_rounded,
+                      isFavourite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                       color: Apptheme.primary,
                     ),
                   ),

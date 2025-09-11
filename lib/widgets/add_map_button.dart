@@ -1,12 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:evently/connection/location_service.dart';
-import 'package:evently/providers/settings_provider.dart';
-import 'package:evently/theme/apptheme.dart';
-import 'package:evently/widgets/icon_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../connection/location_service.dart';
+import '../providers/settings_provider.dart';
+import '../theme/apptheme.dart';
+import 'icon_item.dart';
 
 class AddMapButton extends StatelessWidget {
   const AddMapButton({required this.onPickLocation, this.text, super.key});
@@ -17,7 +18,7 @@ class AddMapButton extends StatelessWidget {
     final isDark = Provider.of<SettingsProvider>(context).isDark;
     return OutlinedButton(
       onPressed: () async {
-        LatLng? location = await LocationService.pickLocation(context);
+        final LatLng? location = await LocationService.pickLocation(context);
         if (location != null) {
           onPickLocation(location);
         }
@@ -46,7 +47,7 @@ class AddMapButton extends StatelessWidget {
               ),
             ),
             child: IconItem(
-              iconName: isDark ? "black_location_icon" : "location_icon",
+              iconName: isDark ? 'black_location_icon' : 'location_icon',
             ),
           ),
           SizedBox(
@@ -54,7 +55,7 @@ class AddMapButton extends StatelessWidget {
           ),
           Expanded(
             child: AutoSizeText(
-              text ?? "Add Location",
+              text ?? 'Add Location',
               style: text != null
                   ? Theme.of(context).textTheme.titleMedium!.copyWith(color: Apptheme.primary)
                   : Theme.of(context).textTheme.titleLarge!.copyWith(color: Apptheme.primary),
